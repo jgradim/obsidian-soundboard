@@ -1,0 +1,11 @@
+{
+	"id": "obsidian-soundboard",
+	"name": "Obsidian Soundboard",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Play local and remote sound files as background tracks or one-shot effects. Built for running D&D campaigns.",
+	"author": "João Gradim",
+	"authorUrl": "",
+	"fundingUrl": "",
+	"isDesktopOnly": false
+}
