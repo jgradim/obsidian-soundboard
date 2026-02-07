@@ -1,0 +1,44 @@
+import { type FuzzyMatch, normalizePath, Setting, TFolder } from "obsidian";
+
+import { type SoundboardSettingsTab } from "src/settings";
+import { FolderInputSuggest } from "src/suggest";
+
+export default function renderRootFolderSettings(
+  containerEl: HTMLElement,
+  settingsTab: SoundboardSettingsTab,
+) {
+  const { app, plugin } = settingsTab;
+
+  containerEl.empty();
+
+  new Setting(containerEl)
+    .setName("Source folder location")
+    .setDesc("Sound files in this folder and subfolders will be available to use.")
+    .addText((text) => {
+      text
+        .setPlaceholder('/')
+        .setValue(plugin.settings.rootFolder)
+        .onChange(async (val) => {
+          if (!app.vault.getFolderByPath(val)) return;
+
+          plugin.settings.rootFolder = val;
+          await plugin.saveConfig();
+          await plugin.loadConfig();
+          
+          settingsTab.renderTracks();
+        })
+
+      const suggestions = new FolderInputSuggest(app, text);
+      suggestions.onSelect(async (result: FuzzyMatch<TFolder>) => {
+        const path = normalizePath(result.item.path)
+        text.setValue(path);
+        suggestions.close();
+
+        plugin.settings.rootFolder = path;
+        await plugin.saveConfig();
+        await plugin.loadConfig();
+
+        settingsTab.renderTracks();
+      })
+    })
+}

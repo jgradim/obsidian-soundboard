@@ -1,27 +1,127 @@
-import { Notice, Plugin } from 'obsidian';
+import { Notice, Plugin, TAbstractFile, TFile, WorkspaceLeaf } from 'obsidian';
 
-import { DEFAULT_SETTINGS, ObsidianSoundboardSettingsTab } from './settings';
-import { ObsidianSoundboardPluginSettings } from './types';
+import { DEFAULT_DATA, DEFAULT_SETTINGS, SoundboardSettingsTab } from 'src/settings';
+import { type PluginSettings, type PluginData, type PluginConfiguration, type Track } from 'src/types';
+import { SoundboardView, VIEW_TYPE_SOUNDBOARD } from 'src/views/view.soundboard';
+import { appState } from 'src/state.svelte';
+import { allowedAudioExtensions } from './shared';
+import { ICON_COLORS } from './constants/colors';
 
+export default class Soundboard extends Plugin {
+  settings: PluginSettings;
+  data: PluginData;
 
-export default class ObsidianSoundboard extends Plugin {
-  settings: ObsidianSoundboardPluginSettings;
+  buildTrack(file: TFile): Track {
+    const { bg, fg } = ICON_COLORS.at(Math.floor(Math.random() * ICON_COLORS.length))!
 
-  async loadSettings() {
-    const savedSettings = await this.loadData() as Partial<ObsidianSoundboardPluginSettings>;
-
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, savedSettings);
+    return {
+      path: file.path,
+      uri: this.app.vault.adapter.getResourcePath(file.path),
+      name: file.name,
+      icon: 'music',
+      bg,
+      fg,
+    }
   }
 
-  async saveSettings() {
-    await this.saveData(this.settings);
+  buildVaultTracks(): Record<string, Track> {
+    const { vault } = this.app;
+
+    const audioTracks = this.app.vault.getAllLoadedFiles()
+      .filter((file: TAbstractFile) => (
+        file instanceof TFile
+        && file.path.startsWith(this.settings.rootFolder)
+        && allowedAudioExtensions.includes(file.extension)
+      ))
+      .reduce((tracks, file: TFile) => {
+        const track = this.data.tracks[file.path] !== undefined
+          ? { ...this.data.tracks[file.path], uri: vault.adapter.getResourcePath(file.path) }
+          : this.buildTrack(file);
+
+        return {
+          ...tracks,
+          [file.path]: track,
+        }
+      }, {});
+
+    // console.log('buildVaultTracks', audioTracks);
+
+    return audioTracks;
+  }
+
+  async loadConfig() {
+    const config: PluginConfiguration = await this.loadData() as PluginConfiguration;
+
+    // console.log('loadConfig', config);
+
+    const settings = Object.assign({}, DEFAULT_SETTINGS, config.settings);
+    const data = Object.assign({}, DEFAULT_DATA, config.data);
+
+    this.settings = settings;
+    this.data = data;
+    this.data.tracks = this.buildVaultTracks()
+
+    appState.tiles = [ ...this.data.tiles ];
+    appState.tracks = { ...this.data.tracks };
+  }
+
+  async saveConfig() {
+    const config: PluginConfiguration = {
+      settings: this.settings,
+      data: {
+        tiles: appState.tiles,
+        tracks: appState.tracks,
+      }
+    };
+
+    // console.log('saveConfig', config);
+
+    await this.saveData(config);
+  }
+
+  async clearData() {
+    const config: PluginConfiguration = {
+      settings: this.settings,
+      data: DEFAULT_DATA,
+    };
+
+    await this.saveData(config);
+    await this.loadConfig();
+  }
+
+  async cleanData() {
+  }
+
+  async activateView() {
+    const { workspace } = this.app;
+
+    let leaf: WorkspaceLeaf | null = null;
+    const leaves = workspace.getLeavesOfType(VIEW_TYPE_SOUNDBOARD);
+
+    if (leaves.length > 0) {
+      leaf = leaves[0] as WorkspaceLeaf;
+    } else {
+      leaf = workspace.getRightLeaf(false) as WorkspaceLeaf;
+      await leaf.setViewState({ type: VIEW_TYPE_SOUNDBOARD, active: true });
+    }
+
+    await workspace.revealLeaf(leaf);
   }
 
   async onload(): Promise<void> {
-    await this.loadSettings();
+    // wait for workspace to be ready before loading config / building app state
+    //
+    // otherwise we run into timing issues where `app.vault.getAllLoadedFiles()`
+    // only returns the root (/) folder
+    this.app.workspace.onLayoutReady(async () => {
+      await this.loadConfig();
 
-    this.addRibbonIcon('audio-lines', 'Soundboard', (_ev: MouseEvent) => {
-      new Notice('Open soundboard');
+      this.registerView(VIEW_TYPE_SOUNDBOARD, (leaf) => new SoundboardView(leaf));
+      this.addSettingTab(new SoundboardSettingsTab(this.app, this));
+    });
+
+    this.addRibbonIcon('audio-lines', 'Soundboard', async (_ev: MouseEvent) => {
+      await this.activateView();
     });
 
     this.addCommand({
@@ -39,104 +139,10 @@ export default class ObsidianSoundboard extends Plugin {
         new Notice('Open soundboard (new window)');
       }
     });
-
-    this.addSettingTab(new ObsidianSoundboardSettingsTab(this.app, this));
   }
 
-  onunload(): void {}
+  onunload(): void {
+    this.saveConfig()
+      .catch(() => {});
+  }
 }
-
-// export default class MyPlugin extends Plugin {
-//   settings: MyPluginSettings;
-// 
-//   async onload() {
-//     await this.loadSettings();
-// 
-//     // This creates an icon in the left ribbon.
-//     this.addRibbonIcon('dice', 'Sample', (evt: MouseEvent) => {
-//       // Called when the user clicks the icon.
-//       new Notice('This is a notice!');
-//     });
-// 
-//     // This adds a status bar item to the bottom of the app. Does not work on mobile apps.
-//     const statusBarItemEl = this.addStatusBarItem();
-//     statusBarItemEl.setText('Status bar text');
-// 
-//     // This adds a simple command that can be triggered anywhere
-//     this.addCommand({
-//       id: 'open-modal-simple',
-//       name: 'Open modal (simple)',
-//       callback: () => {
-//         new SampleModal(this.app).open();
-//       }
-//     });
-//     // This adds an editor command that can perform some operation on the current editor instance
-//     this.addCommand({
-//       id: 'replace-selected',
-//       name: 'Replace selected content',
-//       editorCallback: (editor: Editor, view: MarkdownView) => {
-//         editor.replaceSelection('Sample editor command');
-//       }
-//     });
-//     // This adds a complex command that can check whether the current state of the app allows execution of the command
-//     this.addCommand({
-//       id: 'open-modal-complex',
-//       name: 'Open modal (complex)',
-//       checkCallback: (checking: boolean) => {
-//         // Conditions to check
-//         const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
-//         if (markdownView) {
-//           // If checking is true, we're simply "checking" if the command can be run.
-//           // If checking is false, then we want to actually perform the operation.
-//           if (!checking) {
-//             new SampleModal(this.app).open();
-//           }
-// 
-//           // This command will only show up in Command Palette when the check function returns true
-//           return true;
-//         }
-//         return false;
-//       }
-//     });
-// 
-//     // This adds a settings tab so the user can configure various aspects of the plugin
-//     this.addSettingTab(new SampleSettingTab(this.app, this));
-// 
-//     // If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
-//     // Using this function will automatically remove the event listener when this plugin is disabled.
-//     this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-//       new Notice("Click");
-//     });
-// 
-//     // When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-//     
-// 
-//   }
-// 
-//   onunload() {
-//   }
-// 
-//   async loadSettings() {
-//     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData() as Partial<MyPluginSettings>);
-//   }
-// 
-//   async saveSettings() {
-//     await this.saveData(this.settings);
-//   }
-// }
-// 
-// class SampleModal extends Modal {
-//   constructor(app: App) {
-//     super(app);
-//   }
-// 
-//   onOpen() {
-//     let {contentEl} = this;
-//     contentEl.setText('Woah!');
-//   }
-// 
-//   onClose() {
-//     const {contentEl} = this;
-//     contentEl.empty();
-//   }
-// }

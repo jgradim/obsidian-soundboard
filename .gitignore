@@ -12,6 +12,10 @@ node_modules
 # They should be uploaded to GitHub releases instead.
 main.js
 
+# Don't include the compiled main.css from Svelte file in the repo.
+# They should be uploaded to GitHub releases instead.
+main.css
+
 # Exclude sourcemaps
 *.map
 
