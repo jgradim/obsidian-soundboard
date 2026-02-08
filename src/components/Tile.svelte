@@ -88,6 +88,14 @@
     ]
   });
 
+  let volume: number = $derived.by(() => Math.floor((tile?.volume ?? 1) * 100))
+  let volumeIcon: string = $derived.by(() => {
+    if (volume === 0) return 'volume-x';
+    if (volume < 33) return 'volume';
+    if (volume < 66) return 'volume-1';
+    return 'volume-2';
+  });
+
   // Attachments
   const icon = (name: string): Attachment =>
     (containerEl: HTMLElement) => {
@@ -158,13 +166,24 @@
       removeTile(idx);
   }
 
+  const onVolumeChange = (ev: Event) => {
+    const target: HTMLInputElement = ev.target as HTMLInputElement;
+
+    const value: number = parseFloat(target.value);
+
+    if (sectionIdx !== null)
+      updateSectionTile(sectionIdx, idx, { volume: value });
+    else
+      updateTile(idx, { volume: value });
+  }
+
   const onLoadedData = (ev: Event) => {
     const target: HTMLAudioElement = ev.target as HTMLAudioElement;
-    target.volume = tile?.volume || 1;
+    target.volume = tile?.volume ?? 1;
     duration = target.duration;
   }
 
-  const updateProgress = (ev: Event ) => {
+  const updateProgress = (ev: Event) => {
     const target: HTMLAudioElement = ev.target as HTMLAudioElement;
     currentTime = target.currentTime;
   }
@@ -204,7 +223,6 @@
     {#if track}
       <div class="track-icon" {@attach icon(track.icon)}></div>
       <div class="track-name">{track.name}</div>
-      <div class="track-time">{moment.utc(duration * 1000).format('mm:ss')}</div>
     {:else}
       <select onchange={onTrackChange}>
         <option value="" disabled selected>Select track</option>
@@ -216,10 +234,28 @@
   </div>
 
   {#if track}
+    <div class="tile-footer">
+      <div class="track-volume-icon" {@attach icon(volumeIcon) }></div>
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.05"
+        class="track-volume"
+        value={tile?.volume ?? 0}
+        oninput={onVolumeChange}
+        {@attach tooltip(volume.toString())}
+      />
+      <div class="track-time">{moment.utc(duration * 1000).format('mm:ss')}</div>
+    </div>
+  {/if}
+
+  {#if track}
     <audio
       id={uid}
       src={track.uri}
       loop={tile?.loop}
+      volume={tile?.volume}
       onloadeddata={onLoadedData}
       ontimeupdate={updateProgress}
       onended={onEnded}
@@ -304,5 +340,28 @@
     display: flex;
     justify-content: flex-end;
     font-size: .75rem;
+  }
+
+  .track-volume-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border-radius: 3px;
+  }
+
+  .track-volume {
+    margin-left: -5px;
+    width: 65px;
+    &::-webkit-slider-thumb {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .tile-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 </style>
