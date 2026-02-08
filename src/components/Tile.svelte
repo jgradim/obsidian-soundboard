@@ -1,14 +1,14 @@
 <script lang="ts">
   import { setIcon, setTooltip, moment } from "obsidian";
-  import { appState, removeTile, updateTile } from "src/state.svelte";
+  import type { Attachment } from "svelte/attachments";
 
   import type { Tile, Track } from "src/types";
-  import type { Attachment } from "svelte/attachments";
-  import type { KeyboardEventHandler, MouseEventHandler } from "svelte/elements";
+  import { appState, removeSectionTile, removeTile, updateSectionTile, updateTile } from "src/state.svelte";
 
   interface Props {
     idx: number;
     tile: Tile;
+    sectionIdx: number | null;
   }
 
   interface TileControl {
@@ -23,7 +23,8 @@
   const uid = $props.id();
   let {
     idx,
-    tile,
+    // tile,
+    sectionIdx,
   }: Props = $props();
 
   // State
@@ -33,8 +34,12 @@
 
   // Derived
   let tracks: Record<string, Track> = $derived(appState.tracks);
+  let tile: Tile | undefined = $derived.by(() => {
+    if (sectionIdx !== null) return appState.sections[sectionIdx]?.tiles[idx];
+    else return appState.tiles[idx];
+  })
   let track: Track | undefined = $derived.by(() => {
-    if (tile.track) return appState.tracks[tile.track];
+    if (tile?.track) return appState.tracks[tile.track];
     return;
   });
   let background: string = $derived.by(() => {
@@ -57,21 +62,21 @@
         icon: "square",
         onClick: stop,
         pressed: false,
-        disabled: !track || !isPlaying,
+        disabled: !track,
       },
       {
         label: "Loop",
         icon: "repeat",
         onClick: toggleLoop,
-        pressed: tile.loop,
-        disabled: !track || !isPlaying,
+        pressed: tile?.loop || false,
+        disabled: !track,
       },
       {
         label: "Edit",
         icon: "pencil",
         onClick: edit,
         pressed: false,
-        disabled: !track || !isPlaying,
+        disabled: !track,
       },
       {
         label: "Remove",
@@ -97,17 +102,23 @@
   const onTrackChange = async (ev: Event) => {
     const target = ev.target as HTMLSelectElement;
 
-    updateTile(idx, { track: target.value });
+    if (sectionIdx !== null)
+      updateSectionTile(sectionIdx, idx, { track: target.value });
+    else
+      updateTile(idx, { track: target.value });
   }
 
   const toggleLoop = async () => {
-    if (!tile.track) return;
+    if (!tile?.track) return;
 
-    updateTile(idx, { loop: !tile.loop})
+    if (sectionIdx !== null)
+      updateSectionTile(sectionIdx, idx, { loop: !tile.loop })
+    else
+      updateTile(idx, { loop: !tile.loop })
   }
 
   const playPause = () => {
-    if (!tile.track) return;
+    if (!tile?.track) return;
 
     isPlaying = !isPlaying;
 
@@ -120,7 +131,7 @@
   }
 
   const stop = () => {
-    if (!tile.track) return;
+    if (!tile?.track) return;
 
     isPlaying = false;
 
@@ -132,16 +143,24 @@
   }
 
   const edit = () => {
-    tile.track = null;
+    stop();
+
+    if (sectionIdx !== null)
+      updateSectionTile(sectionIdx, idx, { track: null });
+    else
+      updateTile(idx, { track: null });
   }
 
   const remove = () => {
-    removeTile(idx);
+    if (sectionIdx !== null)
+      removeSectionTile(sectionIdx, idx);
+    else
+      removeTile(idx);
   }
 
   const onLoadedData = (ev: Event) => {
     const target: HTMLAudioElement = ev.target as HTMLAudioElement;
-    target.volume = tile.volume;
+    target.volume = tile?.volume || 1;
     duration = target.duration;
   }
 
@@ -200,7 +219,7 @@
     <audio
       id={uid}
       src={track.uri}
-      loop={tile.loop}
+      loop={tile?.loop}
       onloadeddata={onLoadedData}
       ontimeupdate={updateProgress}
       onended={onEnded}
@@ -245,7 +264,11 @@
       height: var(--icon-s);
     }
 
-    &.disabled { cursor: default; }
+    &.disabled {
+      cursor: default;
+
+      :global(svg) { color: #444; }
+    }
     &.pressed { background: rgba(0, 0, 0, 0.4); }
   }
 

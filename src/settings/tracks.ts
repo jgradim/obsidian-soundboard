@@ -24,7 +24,7 @@ export default function renderTracksSettings(
         })
     })
 
-  const div = containerEl.createDiv("soundboard-settings-tracks")
+  const div = containerEl.createDiv("soundboard-settings-tracks");
 
   for (const track of Object.values(appState.tracks)) {
     new Setting(div)

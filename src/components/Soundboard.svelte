@@ -1,31 +1,47 @@
 <script lang="ts">
-  import { createDefaultTile } from 'src/shared';
+  import { buildDefaultTile } from 'src/shared';
 
   import TileComponent from './Tile.svelte';
+  import SectionComponent from './Section.svelte';
   import { appState, addTile } from 'src/state.svelte';
+  import { setIcon } from 'obsidian';
 
+  let sections = $derived(appState.sections);
   let tiles = $derived(appState.tiles);
+
+  const useSections = true; // FIXME;
 
   // Callbacks
   function onAddTile() {
-    addTile(createDefaultTile());
+    addTile(buildDefaultTile());
   }
 </script>
 
 <div class="soundboard">
-  <div class="tiles">
-    {#each tiles as tile, idx}
-      <TileComponent
-        idx={idx}
-        tile={tile}
-      />
+  {#if useSections}
+    {#each sections as section, idx}
+      <SectionComponent section={section} idx={idx} />
     {/each}
+  {:else}
+    <div class="tiles">
+      {#each tiles as tile, idx}
+        <TileComponent
+          idx={idx}
+          tile={tile}
+          sectionIdx={null}
+        />
+      {/each}
 
-    <button class="tile" onclick={onAddTile}>
-      + Add Tile
-    </button>
+      <button
+        class="add-tile"
+        aria-label="Add tile"
+        onclick={onAddTile}
+        use:setIcon={"square-plus"}
+      >
+      </button>
 
-  </div>
+    </div>
+  {/if}
 </div>
 
 <style scoped>
@@ -35,5 +51,19 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
+  }
+
+  .add-tile {
+    width: 135px;
+    height: 135px;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    :global(svg) {
+      width: 48px;
+      height: 48px;
+    }
   }
 </style>

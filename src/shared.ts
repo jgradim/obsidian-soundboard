@@ -1,4 +1,4 @@
-import type { Tile } from "src/types";
+import type { Section, Tile } from "src/types";
 
 export const allowedAudioExtensions = [
   'mp3',
@@ -6,7 +6,12 @@ export const allowedAudioExtensions = [
   'ogg',
 ];
 
-export const createDefaultTile = (): Tile => ({
+export const buildDefaultSection = (): Section => ({
+  name: null,
+  tiles: [],
+});
+
+export const buildDefaultTile = (): Tile => ({
   track: null,
   volume: 1,
   loop: false,

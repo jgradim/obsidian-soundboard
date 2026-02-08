@@ -6,6 +6,8 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+.soundboard-settings-sections,
 .soundboard-settings-tracks {
-  padding-left: 2em;
+  padding-left: 6em;
 }

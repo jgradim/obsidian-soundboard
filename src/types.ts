@@ -1,3 +1,8 @@
+export interface Section {
+  name: string | null;
+  tiles: Array<Tile>;
+}
+
 export interface Track {
   path: string;
   uri: string;
@@ -16,15 +21,18 @@ export interface Tile {
 export interface AppState {
   tracks: Record<string, Track>;
   tiles: Array<Tile>;
+  sections: Array<Section>
 }
 
 export interface PluginSettings {
   rootFolder: string;
+  useSections: boolean;
 };
 
 export interface PluginData {
   tracks: Record<string, Track>;
   tiles: Array<Tile>;
+  sections: Array<Section>
 }
 
 export interface PluginConfiguration {

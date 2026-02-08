@@ -12,7 +12,7 @@ export default function renderRootFolderSettings(
   containerEl.empty();
 
   new Setting(containerEl)
-    .setName("Source folder location")
+    .setName("Root folder location")
     .setDesc("Sound files in this folder and subfolders will be available to use.")
     .addText((text) => {
       text
