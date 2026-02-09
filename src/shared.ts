@@ -1,3 +1,4 @@
+import { TILE_DEFAULT_VOLUME } from "src/constants/tile";
 import type { Section, Tile } from "src/types";
 
 export const allowedAudioExtensions = [
@@ -13,6 +14,6 @@ export const buildDefaultSection = (): Section => ({
 
 export const buildDefaultTile = (): Tile => ({
   track: null,
-  volume: 1,
+  volume: TILE_DEFAULT_VOLUME,
   loop: false,
 });

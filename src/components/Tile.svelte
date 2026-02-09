@@ -4,6 +4,7 @@
 
   import type { Tile, Track } from "src/types";
   import { appState, removeSectionTile, removeTile, updateSectionTile, updateTile } from "src/state.svelte";
+  import { TILE_DEFAULT_VOLUME } from "src/constants/tile";
 
   interface Props {
     idx: number;
@@ -88,11 +89,12 @@
     ]
   });
 
-  let volume: number = $derived.by(() => Math.floor((tile?.volume ?? 1) * 100))
+  let volume: number = $derived.by(() => (tile?.volume ?? TILE_DEFAULT_VOLUME))
   let volumeIcon: string = $derived.by(() => {
-    if (volume === 0) return 'volume-x';
-    if (volume < 33) return 'volume';
-    if (volume < 66) return 'volume-1';
+    const v = Math.floor(volume * 100);
+    if (v === 0) return 'volume-x';
+    if (v < 33) return 'volume';
+    if (v < 66) return 'volume-1';
     return 'volume-2';
   });
 
@@ -243,7 +245,7 @@
         class="track-volume"
         value={volume}
         oninput={onVolumeChange}
-        {@attach tooltip(volume.toString())}
+        {@attach tooltip(Math.floor(volume * 100).toString())}
       />
       <div class="track-time">{moment.utc(duration * 1000).format('mm:ss')}</div>
     </div>
