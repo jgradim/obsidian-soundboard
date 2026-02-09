@@ -179,7 +179,6 @@
 
   const onLoadedData = (ev: Event) => {
     const target: HTMLAudioElement = ev.target as HTMLAudioElement;
-    target.volume = tile?.volume ?? 1;
     duration = target.duration;
   }
 
@@ -242,7 +241,7 @@
         max="1"
         step="0.05"
         class="track-volume"
-        value={tile?.volume ?? 0}
+        value={volume}
         oninput={onVolumeChange}
         {@attach tooltip(volume.toString())}
       />
@@ -255,7 +254,7 @@
       id={uid}
       src={track.uri}
       loop={tile?.loop}
-      volume={tile?.volume}
+      volume={volume}
       onloadeddata={onLoadedData}
       ontimeupdate={updateProgress}
       onended={onEnded}
