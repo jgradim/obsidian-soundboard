@@ -49,6 +49,7 @@
 
     return `linear-gradient(90deg, color-mix(in srgb, ${bg}, black 30%) ${progress}, ${bg} 0%);`
   });
+  let foreground: string = $derived.by(() => track?.fg ?? '#fff');
   let controls: Array<TileControl> = $derived.by(() => {
     return [
       {
@@ -195,7 +196,7 @@
   };
 </script>
 
-<div class="tile" style={`background: ${background}`}>
+<div class="tile" style={`background: ${background}; color: ${foreground}`}>
   <div class="tile-controls">
     {#each controls as control}
       <div
