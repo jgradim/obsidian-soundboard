@@ -1,3 +1,4 @@
+import { TFile, type TAbstractFile } from "obsidian";
 import { TILE_DEFAULT_VOLUME } from "src/constants/tile";
 import type { Section, Tile } from "src/types";
 
@@ -17,3 +18,14 @@ export const buildDefaultTile = (): Tile => ({
   volume: TILE_DEFAULT_VOLUME,
   loop: false,
 });
+
+export const isSoundboardFile = (
+  file: TAbstractFile,
+  rootFolder: string
+): boolean => {
+  return (
+    file instanceof TFile
+    && file.path.startsWith(rootFolder)
+    && allowedAudioExtensions.includes(file.extension)
+  );
+}
