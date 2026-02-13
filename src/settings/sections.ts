@@ -27,6 +27,7 @@ export default function renderSectionsSettings(
         .setValue(plugin.settings.useSections)
         .onChange(async (enabled: boolean) => {
           plugin.settings.useSections = enabled;
+          appState.settings.useSections = enabled;
 
           await saveAndRefresh();
         });

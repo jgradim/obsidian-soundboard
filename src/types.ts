@@ -18,12 +18,6 @@ export interface Tile {
   loop: boolean;
 }
 
-export interface AppState {
-  tracks: Record<string, Track>;
-  tiles: Array<Tile>;
-  sections: Array<Section>
-}
-
 export interface PluginSettings {
   rootFolder: string;
   useSections: boolean;
@@ -38,4 +32,11 @@ export interface PluginData {
 export interface PluginConfiguration {
   settings: PluginSettings;
   data: PluginData;
+}
+
+export interface AppState {
+  settings: PluginSettings;
+  tracks: Record<string, Track>;
+  tiles: Array<Tile>;
+  sections: Array<Section>
 }

@@ -146,6 +146,7 @@ export default class Soundboard extends Plugin {
     this.data = data;
     this.data.tracks = this.buildVaultTracks()
 
+    appState.settings = { ...this.settings };
     appState.sections = [ ...this.data.sections ];
     appState.tiles = [ ...this.data.tiles ];
     appState.tracks = { ...this.data.tracks };
@@ -155,6 +156,7 @@ export default class Soundboard extends Plugin {
     const config: PluginConfiguration = {
       settings: this.settings,
       data: {
+        settings: appState.settings,
         tiles: appState.tiles,
         tracks: appState.tracks,
         sections: appState.sections,

@@ -6,11 +6,6 @@
   import { appState, addTile } from 'src/state.svelte';
   import { setIcon } from 'obsidian';
 
-  let sections = $derived(appState.sections);
-  let tiles = $derived(appState.tiles);
-
-  const useSections = true; // FIXME;
-
   // Callbacks
   function onAddTile() {
     addTile(buildDefaultTile());
@@ -18,13 +13,13 @@
 </script>
 
 <div class="soundboard">
-  {#if useSections}
-    {#each sections as section, idx}
+  {#if appState.settings.useSections}
+    {#each appState.sections as section, idx}
       <SectionComponent section={section} idx={idx} />
     {/each}
   {:else}
     <div class="tiles">
-      {#each tiles as tile, idx}
+      {#each appState.tiles as tile, idx}
         <TileComponent
           idx={idx}
           tile={tile}

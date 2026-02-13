@@ -1,6 +1,7 @@
 import { type FuzzyMatch, normalizePath, Setting, TFolder } from "obsidian";
 
 import { type SoundboardSettingsTab } from "src/settings";
+import { appState } from "src/state.svelte";
 import { FolderInputSuggest } from "src/suggest";
 
 export default function renderRootFolderSettings(
@@ -22,6 +23,8 @@ export default function renderRootFolderSettings(
           if (!app.vault.getFolderByPath(val)) return;
 
           plugin.settings.rootFolder = val;
+          appState.settings.rootFolder = val;
+
           await plugin.saveConfig();
           await plugin.loadConfig();
           
