@@ -22,6 +22,21 @@ export default function renderSectionsSettings(
   const toggleSetting = new Setting(containerEl)
     .setName("Use sections")
     .setDesc("Toggle between single or multiple soundboards")
+
+  if (plugin.settings.useSections) {
+    toggleSetting
+      .addButton((button) => {
+        button
+          .setButtonText('Add section')
+          .onClick(async() => {
+            addSection(buildDefaultSection());
+
+            await saveAndRefresh();
+          })
+      })
+  }
+
+  toggleSetting
     .addToggle((toggle) => {
       toggle
         .setValue(plugin.settings.useSections)
@@ -31,19 +46,6 @@ export default function renderSectionsSettings(
 
           await saveAndRefresh();
         });
-    })
-
-  if (!plugin.settings.useSections) return;
-
-  toggleSetting
-    .addButton((button) => {
-      button
-        .setButtonText('Add section')
-        .onClick(async() => {
-          addSection(buildDefaultSection());
-
-          await saveAndRefresh();
-        })
     })
 
   const div = containerEl.createDiv("soundboard-settings-sections");

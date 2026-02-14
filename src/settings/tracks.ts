@@ -15,14 +15,6 @@ export default function renderTracksSettings(
   new Setting(containerEl)
     .setName("Customize tracks")
     .setDesc("Customize audio tracks under root folder. Change display name, icon, and background and foreground tile colors")
-    .addButton((button) => {
-      button
-        .setButtonText("Clear data")
-        .onClick(async () => {
-          await plugin.clearData();
-          settingsTab.renderTracks();
-        })
-    })
 
   const div = containerEl.createDiv("soundboard-settings-tracks");
 
