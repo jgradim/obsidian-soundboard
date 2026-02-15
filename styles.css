@@ -11,3 +11,8 @@ If your plugin does not need CSS, delete this file.
 .soundboard-settings-tracks {
   padding-left: 6em;
 }
+
+.flex { display: flex; }
+.flex-center { align-items: center; justify-content: center; }
+.flex-sp-between { justify-content: space-between; }
+.flex-sp-around { justify-content: space-around; }

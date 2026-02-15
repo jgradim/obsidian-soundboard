@@ -137,7 +137,7 @@ export default class Soundboard extends Plugin {
   async loadConfig() {
     const config: PluginConfiguration = await this.loadData() as PluginConfiguration;
 
-    console.log('loadConfig', config);
+    // console.log('loadConfig', config);
 
     const settings = Object.assign({}, DEFAULT_SETTINGS, config.settings);
     const data = Object.assign({}, DEFAULT_DATA, config.data);
@@ -154,16 +154,15 @@ export default class Soundboard extends Plugin {
 
   async saveConfig() {
     const config: PluginConfiguration = {
-      settings: this.settings,
+      settings: appState.settings,
       data: {
-        settings: appState.settings,
         tiles: appState.tiles,
         tracks: appState.tracks,
         sections: appState.sections,
       }
     };
 
-    console.log('saveConfig', config);
+    // console.log('saveConfig', config);
 
     await this.saveData(config);
   }

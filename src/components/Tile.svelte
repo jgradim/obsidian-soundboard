@@ -198,7 +198,7 @@
 
 <div class="tile" style={`background: ${background}; color: ${foreground}`}>
   <div class="tile-controls">
-    {#each controls as control}
+    {#each controls as control (control.icon)}
       <div
         role="button"
         tabindex="0"
@@ -228,7 +228,7 @@
     {:else}
       <select onchange={onTrackChange}>
         <option value="" disabled selected>Select track</option>
-        {#each Object.entries(tracks) as [path, track]}
+        {#each Object.entries(tracks) as [path, track] (path)}
           <option value={path}>{track.name}</option>
         {/each}
       </select>

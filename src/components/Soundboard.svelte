@@ -14,12 +14,12 @@
 
 <div class="soundboard">
   {#if appState.settings.useSections}
-    {#each appState.sections as section, idx}
+    {#each appState.sections as section, idx (idx)}
       <SectionComponent section={section} idx={idx} />
     {/each}
   {:else}
     <div class="tiles">
-      {#each appState.tiles as tile, idx}
+      {#each appState.tiles as tile, idx (idx)}
         <TileComponent
           idx={idx}
           tile={tile}

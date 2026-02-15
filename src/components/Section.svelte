@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Section, Tile, Track } from "src/types";
+  import type { Section } from "src/types";
 
   import { appState, addSectionTile } from "src/state.svelte";
   import TileComponent from './Tile.svelte';
@@ -23,32 +23,40 @@
 
 <div class="section">
   {#if section.name}
-    <div class="section-title">{section.name}</div>
+    <div class="section-title flex flex-sp-between">
+      <span>{section.name}</span>
+      <button
+        class="extra"
+        aria-label="Add tile"
+        onclick={onAddTile}
+        use:setIcon={"square-plus"}
+      >
+      </button>
+    </div>
   {/if}
 
   <div class="tiles">
-    {#each tiles as tile, idx}
+    {#each tiles as tile, idx (idx)}
       <TileComponent
         idx={idx}
         tile={tile}
         sectionIdx={sectionIdx}
       />
     {/each}
-
-    <button
-      class="add-tile"
-      aria-label="Add tile"
-      onclick={onAddTile}
-      use:setIcon={"square-plus"}
-    >
-    </button>
   </div>
 </div>
 
 <style scoped>
+  .section {
+    margin-bottom: 15px;
+  }
+
   .section-title {
     font-size: var(--font-ui-large);
     font-weight: var(--font-bold);
+    background: rgba(0, 0, 0, 0.25);
+    padding: 5px 10px;
+    border-radius: 5px;
   }
 
   .tiles {
@@ -57,19 +65,5 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-  }
-
-  .add-tile {
-    width: 135px;
-    height: 135px;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 1.2rem;
-    cursor: pointer;
-
-    :global(svg) {
-      width: 48px;
-      height: 48px;
-    }
   }
 </style>
