@@ -1,30 +1,45 @@
-# Obsidian Sample Plugin
+# obsidian-soundboard
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+obsidian-soundboard is a plugin for [Obsidian](https://obsidian.md) that allows you to use local sound files to create soundboards and playlists for tracks, ambiance and sound effects.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+> [!WARNING]
+> Plugin under heavy development
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open modal (simple)" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+## Why?
 
-## First time developing plugins?
+Because I use [Obsidian](https://obsidian.md) on my laptop to run an offline D&D campaign (thank you [@javalent](github.com/javalent/)!), and use background music, ambiance, and sound effects. I couln't find anything that would fit my needs: no internet access required, ability to use custom tracks, and light on battery usage.
 
-Quick starting guide for new plugin devs:
+So I decided to add my soundtracks to my D&D vault, and start building a weird soundboard / playlist mix.
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+This plugin is probably not for you. But if it is, I hope you find it useful and it helps you run some memorable games!
+
+## Features
+
+- Create a single soundboard with unlimited tracks, or create multiple soundboards for better organization;
+- Customize track names, icon, background color, and text and icon colors;
+- Reacts to changes in your vault filesystem; move, rename, or delete your files, and your soundboards and settings will be automatically updated;
+
+## Development
+
+This project aims to have no runtime dependencies, other than `obsidian`.
+
+The custom soundboard view uses Svelte 5.
+
+## TODO
+
+- [ ] Section Settings
+  - [ ] Toggle Visibility
+- [ ] Track Settings
+  - [ ] Filter / search tracks
+  - [ ] Sort tracks
+- [ ] Section controls
+  - [x] Add Tile
+  - [ ] Stop all
+- [ ] Section playlist / sequencer mode
+  - [ ] Play tiles in sequenc
+
+
+------------------------------------------------------------------------------------
 
 ## Releasing new releases
 
@@ -44,22 +59,9 @@ Quick starting guide for new plugin devs:
 - Make sure you have a `README.md` file in the root of your repo.
 - Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
 
-## How to use
-
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
-
 ## Manually installing the plugin
 
 - Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- This project already has eslint preconfigured, you can invoke a check by running`npm run lint`
-- Together with a custom eslint [plugin](https://github.com/obsidianmd/eslint-plugin) for Obsidan specific code guidelines.
-- A GitHub action is preconfigured to automatically lint every commit on all branches.
 
 ## Funding URL
 
