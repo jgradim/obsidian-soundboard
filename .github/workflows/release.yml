@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # - name: Get version from manifest
+      #   id: get_version
+      #   run: |
+      #     echo "version=$(node -p "require('./manifest.json').version")" >> $GITHUB_OUTPUT
+
+      # - name: Create release files
+      #   run: |
+      #     mkdir release
+      #     cp main.js manifest.json styles.css release/ 2>/dev/null || cp main.js manifest.json release/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            main.js
+            manifest.json
+            styles.css
+          # name: ${{ steps.get_version.outputs.version }}
+          name: ${{ github.ref_name }}
+          draft: true
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Upload to release
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: obsidian-soundboard-${{ steps.get_version.outputs.version }}
+      #     path: release/
