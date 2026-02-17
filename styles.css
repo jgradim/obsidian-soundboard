@@ -13,6 +13,24 @@ If your plugin does not need CSS, delete this file.
   gap: 10px;
 }
 
+.soundboard-settings-group {
+  margin-bottom: 30px;
+
+  &.track-search {
+    margin-bottom: 0;
+
+    .setting-items {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  &.tracks .setting-items {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+
 .soundboard-settings-sections,
 .soundboard-settings-tracks {
   padding-left: 6em;

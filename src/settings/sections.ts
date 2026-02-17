@@ -1,4 +1,4 @@
-import { Setting } from "obsidian";
+import { SettingGroup } from "obsidian";
 
 import { type SoundboardSettingsTab } from "src/settings";
 import { buildDefaultSection } from "src/shared";
@@ -19,41 +19,43 @@ export default function renderSectionsSettings(
 
   containerEl.empty();
 
-  const toggleSetting = new Setting(containerEl)
-    .setName("Use sections")
-    .setDesc("Toggle between single or multiple soundboards")
+  const sg = new SettingGroup(containerEl)
+    .setHeading("Soundboard sections")
+    .addClass("soundboard-settings-group")
+    .addSetting((setting) => {
+      setting
+        .setName("Use sections")
+        .setDesc("Toggle between single or multiple soundboards")
 
-  if (plugin.settings.useSections) {
-    toggleSetting
-      .addButton((button) => {
-        button
-          .setButtonText('Add section')
-          .onClick(async() => {
-            addSection(buildDefaultSection());
+      if (plugin.settings.useSections) {
+        setting
+          .addButton((button) => {
+            button
+              .setButtonText('Add section')
+              .onClick(async() => {
+                addSection(buildDefaultSection());
 
-            await saveAndRefresh();
+                await saveAndRefresh();
+              })
           })
-      })
-  }
+      }
 
-  toggleSetting
-    .addToggle((toggle) => {
-      toggle
-        .setValue(plugin.settings.useSections)
-        .onChange(async (enabled: boolean) => {
-          plugin.settings.useSections = enabled;
-          appState.settings.useSections = enabled;
+      setting
+        .addToggle((toggle) => {
+          toggle
+            .setValue(plugin.settings.useSections)
+            .onChange(async (enabled: boolean) => {
+              plugin.settings.useSections = enabled;
+              appState.settings.useSections = enabled;
 
-          await saveAndRefresh();
-        });
+              await saveAndRefresh();
+            });
+        })
     })
 
-  const div = containerEl.createDiv("soundboard-settings-sections");
-
-  // for (const section of appState.sections) {
   appState.sections.forEach((section, idx) => {
-    new Setting(div)
-      .addText((text) => {
+    sg.addSetting((setting) => {
+      setting.addText((text) => {
         text
           .setPlaceholder('Section name')
           .setValue(section.name ?? '')
@@ -61,7 +63,7 @@ export default function renderSectionsSettings(
             text.setValue(value);
             updateSection(idx, { name: value });
 
-            // await saveAndRefresh();
+            await saveAndRefresh();
           })
       })
       .addButton((button) => {
@@ -73,5 +75,6 @@ export default function renderSectionsSettings(
             await saveAndRefresh();
           })
       })
+    });
   });
 }
