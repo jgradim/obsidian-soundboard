@@ -62,7 +62,8 @@ export class IconInputSuggest extends AbstractInputSuggest<FuzzyMatch<string>> {
   }
 
   renderSuggestion(result: FuzzyMatch<string>, el: HTMLElement): void {
-      setIcon(el, result.item)
-      el.setText(result.item);
+    el.addClass('icon-input-suggest-item');
+    setIcon(el.createSpan(), result.item);
+    el.createSpan().setText(result.item);
   }
 }
