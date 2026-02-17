@@ -5,6 +5,7 @@
   import type { Tile, Track } from "src/types";
   import { appState, removeSectionTile, removeTile, updateSectionTile, updateTile } from "src/state.svelte";
   import { TILE_DEFAULT_VOLUME } from "src/constants/tile";
+  import { groupTracksBySubfolder } from "src/shared";
 
   interface Props {
     idx: number;
@@ -34,7 +35,10 @@
   let duration: number = $state(0);
 
   // Derived
-  let tracks: Record<string, Track> = $derived(appState.tracks);
+  let groupedTracks: Record<string, Array<Track>> = $derived.by(() => (
+    groupTracksBySubfolder(appState.tracks, appState.settings.rootFolder)
+  ))
+
   let tile: Tile | undefined = $derived.by(() => {
     if (sectionIdx !== null) return appState.sections[sectionIdx]?.tiles[idx];
     else return appState.tiles[idx];
@@ -228,8 +232,12 @@
     {:else}
       <select onchange={onTrackChange}>
         <option value="" disabled selected>Select track</option>
-        {#each Object.entries(tracks) as [path, track] (path)}
-          <option value={path}>{track.name}</option>
+        {#each Object.entries(groupedTracks) as [subfolder, tracks] (subfolder)}
+          <optgroup label={subfolder}>
+            {#each tracks as track (track.path)}
+              <option value={track.path}>{track.name}</option>
+            {/each}
+          </optgroup>
         {/each}
       </select>
     {/if}
