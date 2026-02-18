@@ -1,11 +1,11 @@
 {
-	"id": "obsidian-soundboard",
-	"name": "Obsidian Soundboard",
-	"version": "0.1.0",
-	"minAppVersion": "1.11.7",
-	"description": "Play audio files from your vault in a soundboard.",
-	"author": "João Gradim",
-	"authorUrl": "",
-	"fundingUrl": "",
-	"isDesktopOnly": false
+  "id": "obsidian-soundboard",
+  "name": "Obsidian Soundboard",
+  "version": "0.1.0",
+  "minAppVersion": "1.11.7",
+  "description": "Play audio files from your vault in a soundboard.",
+  "author": "João Gradim",
+  "authorUrl": "",
+  "fundingUrl": "",
+  "isDesktopOnly": false
 }

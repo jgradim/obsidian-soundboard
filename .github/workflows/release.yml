@@ -37,6 +37,9 @@ jobs:
       #     mkdir release
       #     cp main.js manifest.json styles.css release/ 2>/dev/null || cp main.js manifest.json release/
 
+      - name: Generate release notes
+        run: npm run release-notes
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
@@ -48,7 +51,8 @@ jobs:
           name: ${{ github.ref_name }}
           draft: true
           prerelease: false
-          generate_release_notes: true
+          body_path: release-notes.md
+          # generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
