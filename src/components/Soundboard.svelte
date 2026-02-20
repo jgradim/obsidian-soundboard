@@ -10,12 +10,16 @@
   function onAddTile() {
     addTile(buildDefaultTile());
   }
+
+  function onEnded() {};
 </script>
 
 <div class="soundboard">
   {#if appState.settings.useSections}
-    {#each appState.sections as section, idx (idx)}
-      <SectionComponent section={section} idx={idx} />
+    {#each appState.sections as section, idx (`${section.name}-${idx}`)}
+      {#if section.visible}
+        <SectionComponent section={section} idx={idx} />
+      {/if}
     {/each}
   {:else}
     <div class="tiles">
@@ -24,6 +28,7 @@
           idx={idx}
           tile={tile}
           sectionIdx={null}
+          onEnded={onEnded}
         />
       {/each}
 

@@ -3,8 +3,9 @@
 
   import { appState, addSectionTile } from "src/state.svelte";
   import TileComponent from './Tile.svelte';
-  import { buildDefaultTile } from "src/shared";
+  import { buildDefaultTile, tileUid } from "src/shared";
   import { setIcon } from "obsidian";
+  import { icon } from "src/shared/attachments";
 
   interface Props {
     idx: number;
@@ -18,29 +19,42 @@
   const onAddTile = () => {
     addSectionTile(sectionIdx, buildDefaultTile())
   }
+
+  const onTileEnded = (tileIdx: number) => {
+    if (!section.autoplay) return;
+    if (tiles[tileIdx]?.loop) return;
+    
+    const lastTile = tileIdx === tiles.length - 1;
+
+    document
+      .getElementById(tileUid(sectionIdx, lastTile ? 0 : tileIdx + 1))
+      ?.click()
+  }
   
 </script>
 
 <div class="section">
-  {#if section.name}
-    <div class="section-title flex flex-sp-between">
+  <div class="section-title flex ai-center jc-between">
+    <div class="flex ai-center gap-10">
+      <span {@attach icon(section.autoplay ? 'list-music' : 'music-3')}></span>
       <span>{section.name}</span>
-      <button
-        class="extra"
-        aria-label="Add tile"
-        onclick={onAddTile}
-        use:setIcon={"square-plus"}
-      >
-      </button>
     </div>
-  {/if}
+    <button
+      class="extra"
+      aria-label="Add tile"
+      onclick={onAddTile}
+      use:setIcon={"square-plus"}
+    >
+    </button>
+  </div>
 
   <div class="tiles">
-    {#each tiles as tile, idx (idx)}
+    {#each tiles as tile, idx (`${tile.track}-${idx}`)}
       <TileComponent
         idx={idx}
         tile={tile}
         sectionIdx={sectionIdx}
+        onEnded={() => onTileEnded(idx)}
       />
     {/each}
   </div>

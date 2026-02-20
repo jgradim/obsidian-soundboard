@@ -2,7 +2,7 @@ import { SettingGroup } from "obsidian";
 
 import { type SoundboardSettingsTab } from "src/settings";
 import { buildDefaultSection } from "src/shared";
-import { addSection, appState, removeSection, updateSection } from "src/state.svelte";
+import { addSection, appState, removeSection, swapSections, updateSection } from "src/state.svelte";
 
 export default function renderSectionsSettings(
   containerEl: HTMLElement,
@@ -55,26 +55,81 @@ export default function renderSectionsSettings(
 
   appState.sections.forEach((section, idx) => {
     sg.addSetting((setting) => {
-      setting.addText((text) => {
-        text
-          .setPlaceholder('Section name')
-          .setValue(section.name ?? '')
-          .onChange(async (value: string) => {
-            text.setValue(value);
-            updateSection(idx, { name: value });
+      setting
+        .addComponent((containerEl) => {
+          const label = containerEl.createSpan();
+          label.setText('Autoplay');
+        })
+        .addToggle((toggle) =>
+          toggle
+            .setValue(section.autoplay)
+            .onChange(async (autoplay: boolean) => {
+              updateSection(idx, { autoplay });
 
-            await saveAndRefresh();
-          })
-      })
-      .addButton((button) => {
-        button
-          .setIcon('trash')
-          .onClick(async () => {
-            removeSection(idx);
+              await saveAndRefresh();
+            })
+        )
+        .addText((text) => {
+          text
+            .setPlaceholder('Section name')
+            .setValue(section.name ?? '')
+            .onChange((value: string) => {
+              text.setValue(value);
+              updateSection(idx, { name: value });
+            });
 
-            await saveAndRefresh();
-          })
-      })
+            text.inputEl.onblur = saveAndRefresh;
+        })
+        .addButton((button) => {
+          button
+            .setIcon('chevron-up')
+            .setTooltip('Move up')
+            .setDisabled(idx === 0)
+            .onClick(async () => {
+              if (idx === 0) return; 
+
+              swapSections(idx, idx - 1);
+
+              await saveAndRefresh();
+            });
+        })
+        .addButton((button) => {
+          button
+            .setIcon('chevron-down')
+            .setTooltip('Move down')
+            .setDisabled(idx === appState.sections.length - 1)
+            .onClick(async () => {
+              if (idx === appState.sections.length - 1) return; 
+
+              swapSections(idx, idx + 1);
+
+              await saveAndRefresh();
+            });
+        })
+        .addButton((button) => {
+          button
+            .setIcon(section.visible ? "eye" : "eye-off")
+            .setTooltip(section.visible ? "Hide" : "Show")
+            .onClick(async () => {
+              const visible = !section.visible;
+              updateSection(idx, { visible });
+
+              await saveAndRefresh();
+            })
+        })
+        .addExtraButton((button) => {
+          button.setIcon('none').setDisabled(true);
+        })
+        .addButton((button) => {
+          button
+            .setIcon('trash')
+            .setTooltip("Delete section")
+            .onClick(async () => {
+              removeSection(idx);
+
+              await saveAndRefresh();
+            })
+        })
     });
   });
 }

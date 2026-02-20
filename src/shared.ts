@@ -11,6 +11,9 @@ export const allowedAudioExtensions = [
 export const buildDefaultSection = (): Section => ({
   name: null,
   tiles: [],
+  autoplay: false,
+  repeat: false,
+  visible: true,
 });
 
 export const buildDefaultTile = (): Tile => ({
@@ -19,9 +22,15 @@ export const buildDefaultTile = (): Tile => ({
   loop: false,
 });
 
+export const tileUid = (sectionIdx: number | null, idx: number): string => {
+  return sectionIdx === null
+    ? `tile-${idx}`
+    : `tile-${sectionIdx}-${idx}`
+}
+
 export const isSoundboardFile = (
   file: TAbstractFile,
-  rootFolder: string
+  rootFolder: string,
 ): boolean => {
   return (
     file instanceof TFile
@@ -57,3 +66,7 @@ export const groupTracksBySubfolder = (
     return all;
   }, {});
 }
+
+export const filename = (path: string): string => (
+  path.split('/').slice(-1)[0] ?? ''
+)

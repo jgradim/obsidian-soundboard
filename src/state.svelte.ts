@@ -78,6 +78,17 @@ export const removeSection = (idx: number): void => {
   ];
 }
 
+export const swapSections = (from: number, to: number): void => {
+  const swapped = appState.sections.map((section, idx) => {
+    if (idx === from) return appState.sections[to] as Section;
+    if (idx === to) return appState.sections[from] as Section;
+
+    return section;
+  });
+
+  appState.sections = swapped;
+}
+
 // Tracks
 export const setTracks = (tracks: Record<string, Track>): void => {
   appState.tracks = { ...tracks };

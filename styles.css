@@ -37,6 +37,8 @@ If your plugin does not need CSS, delete this file.
 }
 
 .flex { display: flex; }
-.flex-center { align-items: center; justify-content: center; }
-.flex-sp-between { justify-content: space-between; }
-.flex-sp-around { justify-content: space-around; }
+.gap-10 { gap: 10px; }
+.ai-center { align-items: center; }
+.jc-center { justify-content: center; }
+.jc-between { justify-content: space-between; }
+.jc-around { justify-content: space-around; }

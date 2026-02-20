@@ -36,16 +36,17 @@ The custom soundboard view uses Svelte 5.
 
 ## TODO
 
-- [ ] Section Settings
-  - [ ] Toggle Visibility
+- [x] Section Settings
+  - [x] Toggle Visibility
+  - [x] Move section up / down
 - [ ] Track Settings
   - [x] Filter / search tracks
   - [ ] Sort tracks
 - [ ] Section controls
   - [x] Add Tile
   - [ ] Stop all
-- [ ] Section playlist / sequencer mode
-  - [ ] Play tiles in sequence
+- [x] Section playlist / sequencer mode
+  - [x] Play tiles in sequence
 
 
 ------------------------------------------------------------------------------------

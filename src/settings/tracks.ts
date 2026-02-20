@@ -1,7 +1,7 @@
 import { debounce, SettingGroup, type FuzzyMatch } from "obsidian";
 
 import { SoundboardSettingsTab } from "src/settings";
-import { groupTracksBySubfolder } from "src/shared";
+import { filename, groupTracksBySubfolder } from "src/shared";
 import { appState, updateTrack } from "src/state.svelte";
 import { IconInputSuggest } from "src/suggest";
 import type { Track } from "src/types";
@@ -62,10 +62,11 @@ function renderTracks(
     for (const track of tracks) {
       sg.addSetting((setting) => {
         setting
+          // track name
           .addText((text) => {
             text
-              .setPlaceholder('Name')
-              .setValue(track.name || track.path)
+              .setPlaceholder(filename(track.path))
+              .setValue(track.name)
               .onChange(async (value: string) => {
                 text.setValue(value);
 
@@ -73,6 +74,7 @@ function renderTracks(
                 await plugin.saveConfig();
               })
           })
+          // icon search
           .addText((text) => {
             text
               .setPlaceholder('Icon')
@@ -89,11 +91,13 @@ function renderTracks(
               renderTracks(containerEl, settingsTab, search);
             })
           })
+          // icon preview
           .addExtraButton((button) => {
             button
               .setIcon(track.icon)
               .setDisabled(true);
           })
+          // background color
           .addColorPicker((picker) => {
             picker
               .setValue(track.bg)
@@ -104,6 +108,7 @@ function renderTracks(
                 await plugin.saveConfig();
               });
           })
+          // foreground color
           .addColorPicker((picker) => {
             picker
               .setValue(track.fg)

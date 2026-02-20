@@ -1,16 +1,17 @@
 <script lang="ts">
-  import { setIcon, setTooltip, moment } from "obsidian";
-  import type { Attachment } from "svelte/attachments";
+  import { moment } from "obsidian";
 
   import type { Tile, Track } from "src/types";
   import { appState, removeSectionTile, removeTile, updateSectionTile, updateTile } from "src/state.svelte";
   import { TILE_DEFAULT_VOLUME } from "src/constants/tile";
-  import { groupTracksBySubfolder } from "src/shared";
+  import { groupTracksBySubfolder, tileUid } from "src/shared";
+  import { icon, tooltip } from "src/shared/attachments";
 
   interface Props {
     idx: number;
     tile: Tile;
     sectionIdx: number | null;
+    onEnded: () => void;
   }
 
   interface TileControl {
@@ -22,12 +23,13 @@
   }
 
   // Props
-  const uid = $props.id();
   let {
     idx,
-    // tile,
     sectionIdx,
+    onEnded,
   }: Props = $props();
+
+  const uid = $derived.by(() => `${tileUid(sectionIdx, idx)}-audio`);
 
   // State
   let isPlaying: boolean = $state(false);
@@ -102,16 +104,6 @@
     if (v < 66) return 'volume-1';
     return 'volume-2';
   });
-
-  // Attachments
-  const icon = (name: string): Attachment =>
-    (containerEl: HTMLElement) => {
-      setIcon(containerEl, name);
-    }
-  const tooltip = (text: string): Attachment =>
-    (containerEl: HTMLElement) => {
-      setTooltip(containerEl, text);
-    }
 
   // Callbacks
   const onTrackChange = async (ev: Event) => {
@@ -194,9 +186,10 @@
     currentTime = target.currentTime;
   }
 
-  const onEnded = () => {
+  const onAudioEnded = () => {
     isPlaying = false
     currentTime = 0;
+    onEnded();
   };
 </script>
 
@@ -224,6 +217,7 @@
     tabindex="0"
     onclick={playPause}
     onkeypress={playPause}
+    id={tileUid(sectionIdx, idx)}
     aria-label={isPlaying ? "Pause" : "Play"}
   >
     {#if track}
@@ -268,7 +262,7 @@
       volume={volume}
       onloadeddata={onLoadedData}
       ontimeupdate={updateProgress}
-      onended={onEnded}
+      onended={onAudioEnded}
     ></audio>
   {/if}
 

@@ -1,6 +1,9 @@
 export interface Section {
   name: string | null;
   tiles: Array<Tile>;
+  autoplay: boolean;
+  repeat: boolean;
+  visible: boolean;
 }
 
 export interface Track {
