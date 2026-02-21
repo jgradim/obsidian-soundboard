@@ -12,7 +12,6 @@ export default function renderSectionsSettings(
 
   const saveAndRefresh = async (): Promise<void> => {
     await plugin.saveConfig();
-    await plugin.loadConfig();
     
     settingsTab.renderSections();
   }
@@ -27,7 +26,7 @@ export default function renderSectionsSettings(
         .setName("Use sections")
         .setDesc("Toggle between single or multiple soundboards")
 
-      if (plugin.settings.useSections) {
+      if (appState.settings.useSections) {
         setting
           .addButton((button) => {
             button
@@ -43,9 +42,9 @@ export default function renderSectionsSettings(
       setting
         .addToggle((toggle) => {
           toggle
-            .setValue(plugin.settings.useSections)
+            .setValue(appState.settings.useSections)
             .onChange(async (enabled: boolean) => {
-              plugin.settings.useSections = enabled;
+              appState.settings.useSections = enabled;
               appState.settings.useSections = enabled;
 
               await saveAndRefresh();

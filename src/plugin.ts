@@ -8,8 +8,6 @@ import { buildDefaultSection, isSoundboardFile } from 'src/shared';
 import { ICON_COLORS } from 'src/constants/colors';
 
 export default class Soundboard extends Plugin {
-  settings: PluginSettings;
-  data: PluginData;
 
   async onload(): Promise<void> {
     // - register handlers inside `onLayoutReady` to avoid events sent on vault load
@@ -95,7 +93,7 @@ export default class Soundboard extends Plugin {
   getSoundboardFiles(): Array<TFile> {
     return this.app.vault.getAllLoadedFiles()
     .filter((file: TAbstractFile) => (
-      isSoundboardFile(file, this.settings.rootFolder)
+      isSoundboardFile(file, appState.settings.rootFolder)
       && file instanceof TFile
     )) as Array<TFile>
   }
@@ -113,16 +111,16 @@ export default class Soundboard extends Plugin {
     }
   }
 
-  buildVaultTracks(): Record<string, Track> {
+  buildVaultTracks(savedData: PluginConfiguration): Record<string, Track> {
     const { vault } = this.app;
 
     const audioTracks = this.app.vault.getAllLoadedFiles()
       .filter((file: TAbstractFile) => (
-        isSoundboardFile(file, this.settings.rootFolder)
+        isSoundboardFile(file, savedData.settings.rootFolder)
       ))
       .reduce((tracks, file: TFile) => {
-        const track = this.data.tracks[file.path] !== undefined
-          ? { ...this.data.tracks[file.path], uri: vault.adapter.getResourcePath(file.path) }
+        const track = savedData.data.tracks[file.path] !== undefined
+          ? { ...savedData.data.tracks[file.path], uri: vault.adapter.getResourcePath(file.path) }
           : this.buildTrack(file);
 
         return {
@@ -137,19 +135,14 @@ export default class Soundboard extends Plugin {
   async loadConfig() {
     const config: PluginConfiguration = await this.loadData() as PluginConfiguration;
 
-    // console.log('loadConfig', config);
+    const settings = Object.assign({}, DEFAULT_SETTINGS, config.settings) as PluginSettings;
+    const data = Object.assign({}, DEFAULT_DATA, config.data) as PluginData;
 
-    const settings = Object.assign({}, DEFAULT_SETTINGS, config.settings);
-    const data = Object.assign({}, DEFAULT_DATA, config.data);
+    appState.settings = settings;
 
-    this.settings = settings;
-    this.data = data;
-    this.data.tracks = this.buildVaultTracks()
-
-    appState.settings = { ...this.settings };
-    appState.sections = this.data.sections.map((s) => ({ ...buildDefaultSection(), ...s }));
-    appState.tiles = [ ...this.data.tiles ];
-    appState.tracks = { ...this.data.tracks };
+    appState.tracks = this.buildVaultTracks(config);
+    appState.sections = data.sections.map((s) => ({ ...buildDefaultSection(), ...s }));
+    appState.tiles = data.tiles ;
   }
 
   async saveConfig() {
@@ -162,14 +155,12 @@ export default class Soundboard extends Plugin {
       }
     };
 
-    // console.log('saveConfig', config);
-
     await this.saveData(config);
   }
 
   async clearData() {
     const config: PluginConfiguration = {
-      settings: this.settings,
+      settings: appState.settings,
       data: DEFAULT_DATA,
     };
 
@@ -183,58 +174,40 @@ export default class Soundboard extends Plugin {
   // --------------------------------------------------------------------------
 
   async onFolderAdded(folder: TFolder): Promise<void> {
-    if (!folder.path.startsWith(this.settings.rootFolder)) return;
+    if (!folder.path.startsWith(appState.settings.rootFolder)) return;
 
     let count = 0;
 
     for (const file of this.getSoundboardFiles()) {
       if (!file.path.startsWith(folder.path)) continue;
-      if (file.path in this.data.tracks) continue;
+      if (file.path in appState.tracks) continue;
 
-      this.data.tracks[file.path] = this.buildTrack(file);
+      appState.tracks[file.path] = this.buildTrack(file);
 
       count += 1;
     }
 
     await this.saveConfig();
-    await this.loadConfig();
 
     new Notice(`Soundboard: ${count} tracks added`);
   }
 
   async onFolderRenamed(folder: TFolder, previousPath: string): Promise<void> {
-    if (!previousPath?.startsWith(this.settings.rootFolder)) return;
-    if (!folder.path.startsWith(this.settings.rootFolder)) return;
-
-    let count = 0;
-
-    for (const file of this.getSoundboardFiles()) {
-      if (!file.path.startsWith(folder.path)) continue;
-
-      const previousFile = file.path.replace(previousPath, folder.path);
-
-      if (!(previousFile in this.data.tracks)) continue
-
-      this.renameTrack(file, previousPath);
-
-      count += 1;
-    }
+    if (!previousPath?.startsWith(appState.settings.rootFolder)) return;
+    if (!folder.path.startsWith(appState.settings.rootFolder)) return;
 
     await this.saveConfig();
-    await this.loadConfig();
-
-    new Notice(`Soundboard: ${count} tracks updated`);
   }
 
   async onFolderDeleted(folder: TFolder): Promise<void> {
-    if (!folder.path.startsWith(this.settings.rootFolder)) return;
-    if (!(folder.path in this.data.tracks)) return;
+    if (!folder.path.startsWith(appState.settings.rootFolder)) return;
+    if (!(folder.path in appState.tracks)) return;
 
     let count = 0;
 
     for (const file of this.getSoundboardFiles()) {
       if (!file.path.startsWith(folder.path)) continue;
-      if (!(file.path in this.data.tracks)) continue;
+      if (!(file.path in appState.tracks)) continue;
 
       this.deleteTrack(file);
 
@@ -242,53 +215,48 @@ export default class Soundboard extends Plugin {
     }
 
     await this.saveConfig();
-    await this.loadConfig();
 
     new Notice(`Soundboard: ${count} tracks deleted`);
   }
 
   // TFile handlers
   async onFileAdded(file: TFile): Promise<void> {
-    if (!file.path.startsWith(this.settings.rootFolder)) return;
-    if (file.path in this.data.tracks) return;
+    if (!file.path.startsWith(appState.settings.rootFolder)) return;
+    if (file.path in appState.tracks) return;
 
-    this.data.tracks[file.path] = this.buildTrack(file);
+    appState.tracks[file.path] = this.buildTrack(file);
 
     await this.saveConfig();
-    await this.loadConfig();
 
     new Notice('Soundboard: 1 track added')
   }
 
   async onFileRenamed(file: TFile, previousPath: string): Promise<void> {
-    if (!previousPath?.startsWith(this.settings.rootFolder)) return;
-    if (!file.path.startsWith(this.settings.rootFolder)) return;
-    if (!(previousPath in this.data.tracks)) return;
-    if (file.path in this.data.tracks) return;
+    if (!file.path.startsWith(appState.settings.rootFolder)) return;
+    if (!(previousPath in appState.tracks)) return;
+    if (file.path in appState.tracks) return;
 
     this.renameTrack(file, previousPath);
 
     await this.saveConfig();
-    await this.loadConfig();
 
     new Notice('Soundboard: 1 track updated')
   }
 
   async onFileDeleted(file: TFile): Promise<void> {
-    if (!file.path.startsWith(this.settings.rootFolder)) return;
-    if (!(file.path in this.data.tracks)) return;
+    if (!file.path.startsWith(appState.settings.rootFolder)) return;
+    if (!(file.path in appState.tracks)) return;
 
     this.deleteTrack(file);
 
     await this.saveConfig();
-    await this.loadConfig();
 
     new Notice('Soundboard: 1 track deleted')
   }
 
   renameTrack(file: TFile, previousPath: string): void {
     // update tiles that reference path
-    this.data.tiles = this.data.tiles
+    appState.tiles = appState.tiles
       .map((tile) => {
         if (tile.track !== previousPath) return tile;
 
@@ -297,7 +265,7 @@ export default class Soundboard extends Plugin {
       });
 
     // update tiles in sections that reference path
-    this.data.sections = this.data.sections
+    appState.sections = appState.sections
       .map((section) => ({
         ...section,
         tiles: section.tiles.map((tile) => {
@@ -309,23 +277,23 @@ export default class Soundboard extends Plugin {
       }));
 
     // update track
-    this.data.tracks[file.path] = Object.assign({}, this.data.tracks[previousPath]);
-    delete this.data.tracks[previousPath];
+    appState.tracks[file.path] = Object.assign({}, appState.tracks[previousPath]);
+    delete appState.tracks[previousPath];
   }
 
   deleteTrack(file: TFile): void {
     // delete tiles that reference path
-    this.data.tiles = this.data.tiles
+    appState.tiles = appState.tiles
       .filter((tile) => tile.track !== file.path);
 
     // delete tiles in sections that reference path
-    this.data.sections = this.data.sections
+    appState.sections = appState.sections
       .map((section) => ({
         ...section,
         tiles: section.tiles.filter((tile) => tile.track !== file.path)
       }))
 
     // delete track
-    delete this.data.tracks[file.path];
+    delete appState.tracks[file.path];
   }
 }

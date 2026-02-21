@@ -22,15 +22,13 @@ export default function renderRootFolderSettings(
         .addText((text) => {
           text
             .setPlaceholder('/')
-            .setValue(plugin.settings.rootFolder)
+            .setValue(appState.settings.rootFolder)
             .onChange(async (val) => {
               if (!app.vault.getFolderByPath(val)) return;
 
-              plugin.settings.rootFolder = val;
               appState.settings.rootFolder = val;
 
               await plugin.saveConfig();
-              await plugin.loadConfig();
               
               settingsTab.renderTracks();
             })
@@ -41,9 +39,8 @@ export default function renderRootFolderSettings(
             text.setValue(path);
             suggestions.close();
 
-            plugin.settings.rootFolder = path;
+            appState.settings.rootFolder = path;
             await plugin.saveConfig();
-            await plugin.loadConfig();
 
             settingsTab.renderTracks();
           })

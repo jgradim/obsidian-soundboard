@@ -10,6 +10,7 @@ export default [
   ...tseslint.configs.recommended,
   ...svelte.configs['flat/recommended'],
   {
+    files: ['**/*.ts'],
     languageOptions: {
       globals: {
         ...globals.browser,
