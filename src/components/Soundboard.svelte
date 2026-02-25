@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { buildDefaultTile } from 'src/shared';
+  import { setIcon } from 'obsidian';
+
+  import { buildDefaultTile } from '../shared';
 
   import TileComponent from './Tile.svelte';
   import SectionComponent from './Section.svelte';
-  import { appState, addTile } from 'src/state.svelte';
-  import { setIcon } from 'obsidian';
+  import { appState, addTile } from '../state.svelte';
 
   // Callbacks
   function onAddTile() {

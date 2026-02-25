@@ -1,8 +1,14 @@
 import { SettingGroup } from "obsidian";
 
-import { type SoundboardSettingsTab } from "src/settings";
-import { buildDefaultSection } from "src/shared";
-import { addSection, appState, removeSection, swapSections, updateSection } from "src/state.svelte";
+import { type SoundboardSettingsTab } from "../settings";
+import { buildDefaultSection } from "../shared";
+import {
+  addSection,
+  appState,
+  removeSection,
+  swapSections,
+  updateSection,
+} from "../state.svelte";
 
 export default function renderSectionsSettings(
   containerEl: HTMLElement,

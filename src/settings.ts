@@ -1,10 +1,10 @@
 import {App, PluginSettingTab } from "obsidian";
 
-import { type PluginData, type PluginSettings } from "src/types";
-import type Soundboard from "src/plugin";
+import { type PluginData, type PluginSettings } from "./types";
+import type Soundboard from "./plugin";
 
-import renderRootFolderSetting from "src/settings/root-folder";
-import renderTracksSettings from "src/settings/tracks";
+import renderRootFolderSetting from "./settings/root-folder";
+import renderTracksSettings from "./settings/tracks";
 import renderSectionsSettings from "./settings/sections";
 import renderDataSettings from "./settings/data";
 

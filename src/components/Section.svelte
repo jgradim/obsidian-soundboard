@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { Section } from "src/types";
-
-  import { appState, addSectionTile } from "src/state.svelte";
-  import TileComponent from './Tile.svelte';
-  import { buildDefaultTile, tileUid } from "src/shared";
   import { setIcon } from "obsidian";
-  import { icon } from "src/shared/attachments";
+
+  import type { Section } from "../types";
+  import { appState, addSectionTile } from "../state.svelte";
+  import TileComponent from './Tile.svelte';
+  import { buildDefaultTile, tileUid } from "../shared";
+  import { icon } from "../shared/attachments";
 
   interface Props {
     idx: number;

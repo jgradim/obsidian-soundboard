@@ -1,11 +1,11 @@
 <script lang="ts">
   import { moment } from "obsidian";
 
-  import type { Tile, Track } from "src/types";
-  import { appState, removeSectionTile, removeTile, updateSectionTile, updateTile } from "src/state.svelte";
-  import { TILE_DEFAULT_VOLUME } from "src/constants/tile";
-  import { groupTracksBySubfolder, tileUid } from "src/shared";
-  import { icon, tooltip } from "src/shared/attachments";
+  import type { Tile, Track } from "../types";
+  import { appState, removeSectionTile, removeTile, updateSectionTile, updateTile } from "../state.svelte";
+  import { TILE_DEFAULT_VOLUME } from "../constants/tile";
+  import { groupTracksBySubfolder, tileUid } from "../shared";
+  import { icon, tooltip } from "../shared/attachments";
 
   interface Props {
     idx: number;

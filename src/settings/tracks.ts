@@ -1,10 +1,10 @@
 import { debounce, SettingGroup, type FuzzyMatch } from "obsidian";
 
-import { SoundboardSettingsTab } from "src/settings";
-import { filename, groupTracksBySubfolder } from "src/shared";
-import { appState, updateTrack } from "src/state.svelte";
-import { IconInputSuggest } from "src/suggest";
-import type { Track } from "src/types";
+import { SoundboardSettingsTab } from "../settings";
+import { filename, groupTracksBySubfolder } from "../shared";
+import { appState, updateTrack } from "../state.svelte";
+import { IconInputSuggest } from "../suggest";
+import type { Track } from "../../types";
 
 export default function renderTracksSettings(
   containerEl: HTMLElement,

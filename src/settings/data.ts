@@ -1,6 +1,6 @@
 import { Setting, SettingGroup } from "obsidian";
 
-import { SoundboardSettingsTab } from "src/settings";
+import { SoundboardSettingsTab } from "../settings";
 
 export default function renderDataSettings(
   containerEl: HTMLElement,

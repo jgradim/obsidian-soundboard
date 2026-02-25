@@ -1,8 +1,8 @@
 import { type FuzzyMatch, normalizePath, TFolder, SettingGroup } from "obsidian";
 
-import { type SoundboardSettingsTab } from "src/settings";
-import { appState } from "src/state.svelte";
-import { FolderInputSuggest } from "src/suggest";
+import { type SoundboardSettingsTab } from "../settings";
+import { appState } from "../state.svelte";
+import { FolderInputSuggest } from "../suggest";
 
 export default function renderRootFolderSettings(
   containerEl: HTMLElement,

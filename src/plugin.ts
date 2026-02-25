@@ -1,11 +1,11 @@
 import { Notice, Plugin, TAbstractFile, TFile, TFolder, WorkspaceLeaf } from 'obsidian';
 
-import { DEFAULT_DATA, DEFAULT_SETTINGS, SoundboardSettingsTab } from 'src/settings';
-import { type PluginSettings, type PluginData, type PluginConfiguration, type Track } from 'src/types';
-import { SoundboardView, VIEW_TYPE_SOUNDBOARD } from 'src/views/view.soundboard';
-import { appState } from 'src/state.svelte';
-import { buildDefaultSection, isSoundboardFile } from 'src/shared';
-import { ICON_COLORS } from 'src/constants/colors';
+import { DEFAULT_DATA, DEFAULT_SETTINGS, SoundboardSettingsTab } from './settings';
+import { type PluginSettings, type PluginData, type PluginConfiguration, type Track } from './types';
+import { SoundboardView, VIEW_TYPE_SOUNDBOARD } from './views/view.soundboard';
+import { appState } from './state.svelte';
+import { buildDefaultSection, isSoundboardFile } from './shared';
+import { ICON_COLORS } from './constants/colors';
 
 export default class Soundboard extends Plugin {
 

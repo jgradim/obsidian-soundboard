@@ -1,7 +1,7 @@
 import { ItemView, WorkspaceLeaf, type IconName } from "obsidian";
 import { mount, unmount } from "svelte"
 
-import SoundboardComponent from "src/components/Soundboard.svelte";
+import SoundboardComponent from "../components/Soundboard.svelte";
 
 export const VIEW_TYPE_SOUNDBOARD = 'obsidian-soundboard';
 

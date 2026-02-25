@@ -10,7 +10,7 @@ import {
   setIcon,
 } from "obsidian";
 
-import { LUCIDE_ICON_NAMES } from "src/constants/lucide";
+import { LUCIDE_ICON_NAMES } from "./constants/lucide";
 
 export class FolderInputSuggest extends AbstractInputSuggest<FuzzyMatch<TFolder>> {
   private folders: TFolder[];

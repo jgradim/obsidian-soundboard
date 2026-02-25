@@ -1,6 +1,7 @@
 import { TFile, type TAbstractFile } from "obsidian";
-import { TILE_DEFAULT_VOLUME } from "src/constants/tile";
-import type { Section, Tile, Track } from "src/types";
+
+import { TILE_DEFAULT_VOLUME } from "./constants/tile";
+import type { Section, Tile, Track } from "./types";
 
 export const allowedAudioExtensions = [
   'mp3',

@@ -4,8 +4,8 @@ import type {
   Section,
   Tile,
   Track,
-} from "src/types";
-import { DEFAULT_SETTINGS } from "src/settings";
+} from "./types";
+import { DEFAULT_SETTINGS } from "./settings";
 
 export const appState: AppState = $state({
   settings: DEFAULT_SETTINGS,
