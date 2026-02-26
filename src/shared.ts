@@ -23,6 +23,15 @@ export const buildDefaultTile = (): Tile => ({
   loop: false,
 });
 
+export const buildTrack = (path: string): Track => ({
+  path,
+  uri: '',
+  name: filename(path),
+  icon: 'music',
+  bg: '#242424',
+  fg: '#895bf2',
+});
+
 export const tileUid = (sectionIdx: number | null, idx: number): string => {
   return sectionIdx === null
     ? `tile-${idx}`

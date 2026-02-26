@@ -19,7 +19,6 @@ export default [
       parserOptions: {
         sourceType: 'module',
         ecmaVersion: 2022,
-        extraFileExtensions: ['.svelte'],
       },
     },
     plugins: {
@@ -48,6 +47,10 @@ export default [
   {
     files: ['**/*.svelte'],
     languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
       parser: svelteParser,
       parserOptions: {
         parser: tseslint.parser,
@@ -69,6 +72,10 @@ export default [
   {
     files: ['**/*.svelte.ts', '**/*.svelte.js'],
     languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
       parser: svelteParser,
       parserOptions: {
         parser: tseslint.parser,
@@ -81,6 +88,7 @@ export default [
       'dist/**',
       'build/**',
       'main.js',
+      'version-bump.mjs',
       '*.config.js',
       '*.config.ts',
     ],

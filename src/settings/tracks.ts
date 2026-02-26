@@ -4,7 +4,7 @@ import { SoundboardSettingsTab } from "../settings";
 import { filename, groupTracksBySubfolder } from "../shared";
 import { appState, updateTrack } from "../state.svelte";
 import { IconInputSuggest } from "../suggest";
-import type { Track } from "../../types";
+import type { Track } from "../types";
 
 export default function renderTracksSettings(
   containerEl: HTMLElement,
