@@ -35,7 +35,7 @@
 
 <div class="section">
   <div class="section-title flex ai-center jc-between">
-    <div class="flex ai-center gap-10">
+    <div class="flex ai-center gap-8">
       <span {@attach icon(section.autoplay ? 'list-music' : 'music-3')}></span>
       <span>{section.name}</span>
     </div>
@@ -48,7 +48,7 @@
     </button>
   </div>
 
-  <div class="tiles">
+  <div class="tiles gap-8">
     {#each tiles as tile, idx (`${tile.track}-${idx}`)}
       <TileComponent
         idx={idx}
@@ -62,22 +62,21 @@
 
 <style scoped>
   .section {
-    margin-bottom: 15px;
+    margin-bottom: var(--size-4-4);
   }
 
   .section-title {
     font-size: var(--font-ui-large);
     font-weight: var(--font-bold);
     background: rgba(0, 0, 0, 0.25);
-    padding: 5px 10px;
-    border-radius: 5px;
+    padding: var(--size-2-3) var(--size-4-4);
+    border-radius: var(--button-radius);
   }
 
   .tiles {
-    padding: 10px 0;
+    padding: var(--size-4-4) 0;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
   }
 </style>

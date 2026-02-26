@@ -10,11 +10,11 @@ If your plugin does not need CSS, delete this file.
 .icon-input-suggest-item {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: var(--size-4-2);
 }
 
 .soundboard-settings-group {
-  margin-bottom: 30px;
+  margin-bottom: var(--size-4-8);
 
   &.track-search {
     margin-bottom: 0;
@@ -31,13 +31,13 @@ If your plugin does not need CSS, delete this file.
   }
 }
 
-.soundboard-settings-sections,
-.soundboard-settings-tracks {
-  padding-left: 6em;
+.soundboard-section-setting-item {
+  .setting-item-info { display: none; }
 }
 
+.mr-auto { margin-right: auto; }
 .flex { display: flex; }
-.gap-10 { gap: 10px; }
+.gap-8 { gap: var(--size-4-2); }
 .ai-center { align-items: center; }
 .jc-center { justify-content: center; }
 .jc-between { justify-content: space-between; }

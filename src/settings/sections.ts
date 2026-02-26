@@ -61,30 +61,7 @@ export default function renderSectionsSettings(
   appState.sections.forEach((section, idx) => {
     sg.addSetting((setting) => {
       setting
-        .addComponent((containerEl) => {
-          const label = containerEl.createSpan();
-          label.setText('Autoplay');
-        })
-        .addToggle((toggle) =>
-          toggle
-            .setValue(section.autoplay)
-            .onChange(async (autoplay: boolean) => {
-              updateSection(idx, { autoplay });
-
-              await saveAndRefresh();
-            })
-        )
-        .addText((text) => {
-          text
-            .setPlaceholder('Section name')
-            .setValue(section.name ?? '')
-            .onChange((value: string) => {
-              text.setValue(value);
-              updateSection(idx, { name: value });
-            });
-
-            text.inputEl.onblur = saveAndRefresh;
-        })
+        .setClass('soundboard-section-setting-item')
         .addButton((button) => {
           button
             .setIcon('chevron-up')
@@ -113,24 +90,44 @@ export default function renderSectionsSettings(
         })
         .addButton((button) => {
           button
+            .setClass('mr-auto')
+            .setIcon('trash')
+            .setTooltip("Delete section")
+            .onClick(async () => {
+              removeSection(idx);
+
+              await saveAndRefresh();
+            })
+        })
+        .addText((text) => {
+          text
+            .setPlaceholder('Section name')
+            .setValue(section.name ?? '')
+            .onChange((value: string) => {
+              text.setValue(value);
+              updateSection(idx, { name: value });
+            });
+
+            text.inputEl.onblur = saveAndRefresh;
+        })
+        .addButton((button) => {
+          button
+            .setIcon(section.autoplay ? "list-music" : "music-3")
+            .setTooltip(section.autoplay ? "Switch to One-Shot" : "Switch to autoplay")
+            .onClick(async () => {
+              const autoplay = !section.autoplay;
+              updateSection(idx, { autoplay });
+
+              await saveAndRefresh();
+            })
+        })
+        .addButton((button) => {
+          button
             .setIcon(section.visible ? "eye" : "eye-off")
             .setTooltip(section.visible ? "Hide" : "Show")
             .onClick(async () => {
               const visible = !section.visible;
               updateSection(idx, { visible });
-
-              await saveAndRefresh();
-            })
-        })
-        .addExtraButton((button) => {
-          button.setIcon('none').setDisabled(true);
-        })
-        .addButton((button) => {
-          button
-            .setIcon('trash')
-            .setTooltip("Delete section")
-            .onClick(async () => {
-              removeSection(idx);
 
               await saveAndRefresh();
             })
