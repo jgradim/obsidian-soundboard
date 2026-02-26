@@ -34,16 +34,18 @@ export default function renderRootFolderSettings(
             })
 
           const suggestions = new FolderInputSuggest(app, text);
-          suggestions.onSelect(async (result: FuzzyMatch<TFolder>) => {
-            const path = normalizePath(result.item.path)
-            text.setValue(path);
-            suggestions.close();
+          suggestions.setValue(appState.settings.rootFolder);
+          suggestions
+            .onSelect(async (result: FuzzyMatch<TFolder>) => {
+              const path = normalizePath(result.item.path)
+              text.setValue(path);
+              suggestions.close();
 
-            appState.settings.rootFolder = path;
-            await plugin.saveConfig();
+              appState.settings.rootFolder = path;
+              await plugin.saveConfig();
 
-            settingsTab.renderTracks();
-          })
+              settingsTab.renderTracks();
+            })
         })
     })
 }
