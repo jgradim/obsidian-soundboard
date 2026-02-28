@@ -62,7 +62,7 @@
 
 <style scoped>
   .section {
-    margin-bottom: var(--size-4-4);
+    margin-bottom: var(--size-4-2);
   }
 
   .section-title {
@@ -74,7 +74,7 @@
   }
 
   .tiles {
-    padding: var(--size-4-4) 0;
+    padding: var(--size-4-2) 0;
     display: flex;
     align-items: center;
     flex-wrap: wrap;

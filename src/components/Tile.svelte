@@ -33,6 +33,7 @@
 
   // State
   let isPlaying: boolean = $state(false);
+  let scrubberOpen: boolean = $state(false);
   let currentTime: number = $state(0);
   let duration: number = $state(0);
 
@@ -165,6 +166,10 @@
       removeTile(idx);
   }
 
+  const toggleScrubber = () => {
+    scrubberOpen = !scrubberOpen
+  }
+
   const onVolumeChange = (ev: Event) => {
     const target: HTMLInputElement = ev.target as HTMLInputElement;
 
@@ -174,6 +179,14 @@
       updateSectionTile(sectionIdx, idx, { volume: value });
     else
       updateTile(idx, { volume: value });
+  }
+
+  const onTimeChange = (ev: Event) => {
+    if (!tile?.track) return;
+    const audio: HTMLAudioElement = document.getElementById(uid) as HTMLAudioElement;
+
+    currentTime = parseInt(ev.target.value);
+    audio.currentTime = currentTime;
   }
 
   const onLoadedData = (ev: Event) => {
@@ -250,7 +263,33 @@
         oninput={onVolumeChange}
         {@attach tooltip(Math.floor(volume * 100).toString())}
       />
-      <div class="track-time">{moment.utc(duration * 1000).format('mm:ss')}</div>
+      <div
+        class="track-time"
+        tabindex="0"
+        role="button"
+        onkeyup={toggleScrubber}
+        onclick={toggleScrubber}
+      >
+        {moment.utc((duration - currentTime) * 1000).format('-mm:ss')}
+      </div>
+      <div
+        class="track-scrubber"
+        class:open={scrubberOpen}
+        tabindex="0"
+        role="button"
+        onkeyup={toggleScrubber}
+        onclick={toggleScrubber}
+        style={`background: color-mix(in srgb, ${track.bg}, black 0%)`}
+      >
+        <input
+          type="range"
+          min="0"
+          max={duration}
+          value={currentTime}
+          oninput={onTimeChange}
+        />
+        
+      </div>
     </div>
   {/if}
 
@@ -277,7 +316,6 @@
     width: 135px;
     height: 135px;
     border-radius: 5px;
-    padding: 10px 5px 5px;
     padding: 5px;
   }
 
@@ -343,6 +381,7 @@
   .track-time {
     display: flex;
     justify-content: flex-end;
+    width: 40px;
     font-size: .75rem;
   }
 
@@ -356,8 +395,36 @@
 
   .track-volume {
     margin-left: -5px;
-    width: 65px;
+    width: 60px;
     &::-webkit-slider-thumb {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .track-scrubber {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: green;
+    overflow: hidden;
+    border-radius: 5px;
+    transition: top 200ms ease-in-out,
+      bottom 200ms ease-in-out,
+      left 200ms ease-in-out,
+      right 200ms ease-in-out,
+      margin 200ms ease-in-out;
+
+    &.open {
+      top: 0;
+    }
+
+    input::-webkit-slider-thumb {
       width: 18px;
       height: 18px;
     }
@@ -367,5 +434,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
   }
 </style>
