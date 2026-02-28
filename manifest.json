@@ -1,6 +1,6 @@
 {
-  "id": "obsidian-soundboard",
-  "name": "Obsidian Soundboard",
+  "id": "soundboard",
+  "name": "Soundboard",
   "version": "0.2.0",
   "minAppVersion": "1.11.7",
   "description": "Play audio files from your vault in a soundboard.",

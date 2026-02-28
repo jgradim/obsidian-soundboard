@@ -3,7 +3,7 @@ import { mount, unmount } from "svelte"
 
 import SoundboardComponent from "../components/Soundboard.svelte";
 
-export const VIEW_TYPE_SOUNDBOARD = 'obsidian-soundboard';
+export const VIEW_TYPE_SOUNDBOARD = 'soundboard';
 
 export class SoundboardView extends ItemView {
   soundboard: ReturnType<typeof SoundboardComponent> | undefined;
