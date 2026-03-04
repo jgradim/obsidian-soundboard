@@ -39,7 +39,6 @@ export default class Soundboard extends Plugin {
       // handle files deleted from sounds root folder
       this.registerEvent(
         this.app.vault.on("delete", async (file: TAbstractFile) => {
-          
           if (file instanceof TFile) await this.onFileDeleted(file);
           if (file instanceof TFolder) await this.onFolderDeleted(file);
         })
@@ -168,10 +167,43 @@ export default class Soundboard extends Plugin {
     await this.loadConfig();
   }
 
-  async cleanData() {
-  }
-
   // --------------------------------------------------------------------------
+
+  async onRootFolderChanged(rootFolder: string): Promise<void> {
+    appState.settings.rootFolder = rootFolder;
+
+    const deleted: Array<string> = []
+    appState.tracks = Object.entries(appState.tracks)
+      .map(([path, track]) => {
+        if (!path.startsWith(rootFolder)) {
+          deleted.push(path);
+          return null;
+        }
+        return track;
+      })
+      .filter((track) => track !== null)
+      .reduce((all, track) => ({
+        ...all,
+        [track.path]: track
+      }), {});
+
+    appState.tiles = appState.tiles
+      .filter((tile) => tile.track && !deleted.includes(tile.track))
+
+    appState.sections = appState.sections
+      .map((section) => {
+        const tiles = section.tiles
+          .filter((tile) => tile.track && !deleted.includes(tile.track))
+
+        return {
+          ...section,
+          tiles,
+        }
+      });
+
+    await this.saveConfig();
+    await this.loadConfig();
+  }
 
   async onFolderAdded(folder: TFolder): Promise<void> {
     if (!folder.path.startsWith(appState.settings.rootFolder)) return;

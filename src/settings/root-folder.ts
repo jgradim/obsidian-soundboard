@@ -1,4 +1,4 @@
-import { type FuzzyMatch, normalizePath, TFolder, SettingGroup } from "obsidian";
+import { type FuzzyMatch, normalizePath, TFolder, SettingGroup, TextComponent } from "obsidian";
 
 import { type SoundboardSettingsTab } from "../settings";
 import { appState } from "../state.svelte";
@@ -12,6 +12,10 @@ export default function renderRootFolderSettings(
 
   containerEl.empty();
 
+  // local state
+  let inputLocked = appState.settings.rootFolder !== '/';
+  let input: TextComponent | undefined;
+
   new SettingGroup(containerEl)
     .setHeading("Audio files")
     .addClass("soundboard-settings-group")
@@ -20,16 +24,17 @@ export default function renderRootFolderSettings(
         .setName("Root folder location")
         .setDesc("Sound files in this folder and subfolders will be available to use.")
         .addText((text) => {
+          input = text;
           text
             .setPlaceholder('/')
             .setValue(appState.settings.rootFolder)
+            .setDisabled(inputLocked)
             .onChange(async (val) => {
               if (!app.vault.getFolderByPath(val)) return;
 
-              appState.settings.rootFolder = val;
+              await plugin.onRootFolderChanged(val);
 
-              await plugin.saveConfig();
-              
+              settingsTab.renderRootFolder();
               settingsTab.renderTracks();
             })
 
@@ -41,11 +46,24 @@ export default function renderRootFolderSettings(
               text.setValue(path);
               suggestions.close();
 
-              appState.settings.rootFolder = path;
-              await plugin.saveConfig();
+              await plugin.onRootFolderChanged(path);
 
+              settingsTab.renderRootFolder();
               settingsTab.renderTracks();
             })
+        })
+        .addButton((button) => {
+          button
+            .setIcon(inputLocked ? 'lock' : 'lock-open')
+            .setTooltip(inputLocked ? 'Allow changes' : 'Prevent changes')
+            .onClick(() => {
+              if (!input) return;
+
+              inputLocked = !inputLocked;
+
+              button.setIcon(inputLocked ? 'lock' : 'lock-open');
+              input.setDisabled(inputLocked);
+            });
         })
     })
 }

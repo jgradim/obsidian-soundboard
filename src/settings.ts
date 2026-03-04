@@ -33,6 +33,10 @@ export class SoundboardSettingsTab extends PluginSettingTab {
   }
 
   display(): void {
+    this.render();
+  }
+
+  render(): void {
     const { containerEl } = this;
 
     containerEl.empty();
@@ -40,12 +44,12 @@ export class SoundboardSettingsTab extends PluginSettingTab {
     this.rootContainer = containerEl.createDiv();
     this.sectionsContainer = containerEl.createDiv();
     this.tracksContainer = containerEl.createDiv();
-    this.dataContainer = containerEl.createDiv();
+    // this.dataContainer = containerEl.createDiv();
 
     this.renderRootFolder();
     this.renderSections();
     this.renderTracks();
-    this.renderClearData();
+    // this.renderClearData();
   }
 
   renderRootFolder(): void {
