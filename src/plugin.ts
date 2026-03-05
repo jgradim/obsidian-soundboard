@@ -203,6 +203,8 @@ export default class Soundboard extends Plugin {
 
     await this.saveConfig();
     await this.loadConfig();
+
+    new Notice(`Soundboard: root folder changed to '${rootFolder}'`);
   }
 
   async onFolderAdded(folder: TFolder): Promise<void> {

@@ -379,6 +379,7 @@
   }
 
   .track-time {
+    cursor: pointer;
     display: flex;
     justify-content: flex-end;
     width: 40px;
@@ -394,8 +395,10 @@
   }
 
   .track-volume {
+    cursor: pointer;
     margin-left: -5px;
     width: 60px;
+
     &::-webkit-slider-thumb {
       width: 18px;
       height: 18px;

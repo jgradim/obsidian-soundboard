@@ -58,6 +58,8 @@ export default function renderSectionsSettings(
         })
     })
 
+  if (!appState.settings.useSections) return;
+
   appState.sections.forEach((section, idx) => {
     sg.addSetting((setting) => {
       setting
