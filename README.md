@@ -31,7 +31,7 @@ Usage
 - Go into Settings -> Community Plugins -> Soundboard, and set your root folder. Only audio files in this folder will be available for `obsidian-soundboard` to use
   - Only files with the extension `.flac`, `.mp3`, `.mp4`, `.ogg`, or `.wav` will be available for usage.
 - Show the Soundboard view by:
-	- Clicking the plugin icon on the left toolbard: ![Soundboard icon](./docs/soundboard-icon.png)
+	- Clicking the plugin icon on the left toolbar: ![Soundboard icon](./docs/soundboard-icon.png)
 	- Using the `Soundboard: Open` command.
 
 ### Optional
