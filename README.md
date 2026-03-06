@@ -58,6 +58,8 @@ Single soundboard without any limits. Add, update, remove tiles as needed:
 
 Organize your tiles into sections / playlists that you can re-order, show / hide, and change playback mode (one-shot, or looping playlist)
 
+![Soundboard with sections](./docs/soundboard-multiple.png)
+
 ### Customize track names, icon, and colors
 
 ![Soundboard track settings](./docs/settings-tracks.png)
