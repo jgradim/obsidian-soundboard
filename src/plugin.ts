@@ -9,7 +9,7 @@ import { ICON_COLORS } from './constants/colors';
 
 export default class Soundboard extends Plugin {
 
-  async onload(): Promise<void> {
+  onload(): void {
     // - register handlers inside `onLayoutReady` to avoid events sent on vault load
     // - wait for workspace to be ready before loading config / building app state
     //   otherwise we run into timing issues where `app.vault.getAllLoadedFiles()`
@@ -50,7 +50,7 @@ export default class Soundboard extends Plugin {
     });
 
     this.addCommand({
-      id: 'open-soundboard',
+      id: 'open',
       name: 'Open',
       callback: async () => {
         await this.activateView();
@@ -126,8 +126,8 @@ export default class Soundboard extends Plugin {
   async loadConfig() {
     const config: PluginConfiguration = await this.loadData() as PluginConfiguration;
 
-    const settings = Object.assign({}, DEFAULT_SETTINGS, config.settings) as PluginSettings;
-    const data = Object.assign({}, DEFAULT_DATA, config.data) as PluginData;
+    const settings: PluginSettings = Object.assign({}, DEFAULT_SETTINGS, config.settings);
+    const data: PluginData = Object.assign({}, DEFAULT_DATA, config.data);
 
     appState.settings = settings;
 
