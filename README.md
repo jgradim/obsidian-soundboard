@@ -20,7 +20,7 @@ This plugin is probably not for you. But if it is, I hope you find it useful and
 Installation
 ---
 
-You can download the plugin from the [official obsidian plugin list](https://obsidian.md/plugins?search=soundboard) (pending [review]()), or use [BRAT](https://github.com/TfTHacker/obsidian42-brat) to install directly from github releases.
+You can download the plugin from the [official obsidian plugin list](https://obsidian.md/plugins?search=soundboard) (pending [review](https://github.com/obsidianmd/obsidian-releases/pull/10790)), or use [BRAT](https://github.com/TfTHacker/obsidian42-brat) to install directly from github releases.
 
 Remember to enable the plugin after installation!
 
