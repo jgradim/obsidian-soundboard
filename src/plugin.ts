@@ -51,17 +51,9 @@ export default class Soundboard extends Plugin {
 
     this.addCommand({
       id: 'open-soundboard',
-      name: 'Open soundboard',
-      callback: () => {
-        new Notice('Open soundboard');
-      }
-    });
-
-    this.addCommand({
-      id: 'open-soundboard-popout',
-      name: 'Open soundboard (new window)',
-      callback: () => {
-        new Notice('Open soundboard (new window)');
+      name: 'Open',
+      callback: async () => {
+        await this.activateView();
       }
     });
   }
