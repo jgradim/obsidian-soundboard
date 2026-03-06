@@ -4,9 +4,11 @@ import { TILE_DEFAULT_VOLUME } from "./constants/tile";
 import type { Section, Tile, Track } from "./types";
 
 export const allowedAudioExtensions = [
+  'flac',
   'mp3',
-  'wav',
+  'mp4',
   'ogg',
+  'wav',
 ];
 
 export const buildDefaultSection = (): Section => ({
