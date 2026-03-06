@@ -1,7 +1,7 @@
 {
   "id": "soundboard",
   "name": "Soundboard",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "minAppVersion": "1.11.7",
   "description": "Play audio files from your vault in a soundboard.",
   "author": "João Gradim",
