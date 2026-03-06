@@ -184,8 +184,9 @@
   const onTimeChange = (ev: Event) => {
     if (!tile?.track) return;
     const audio: HTMLAudioElement = document.getElementById(uid) as HTMLAudioElement;
+    const target: HTMLInputElement = ev.target as HTMLInputElement;
 
-    currentTime = parseInt(ev.target.value);
+    currentTime = parseInt(target.value);
     audio.currentTime = currentTime;
   }
 
