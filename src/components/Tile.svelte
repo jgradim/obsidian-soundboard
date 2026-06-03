@@ -207,7 +207,7 @@
   };
 </script>
 
-<div class="tile" style={`background: ${background}; color: ${foreground}`}>
+<div class="tile size-{appState.settings.tileSize}" style={`background: ${background}; color: ${foreground}`}>
   <div class="tile-controls">
     {#each controls as control (control.icon)}
       <div
@@ -365,9 +365,9 @@
     align-items: center;
     flex-grow: 1;
 
-    :global(svg) {
-      width: 42px !important;
-      height: 42px !important;
+    :global(svg){
+      width: 42px;
+      height: 42px;
     }
   }
 
@@ -440,4 +440,113 @@
     justify-content: space-between;
     position: relative;
   }
+
+  /* Tile size overrides */
+
+  .tile.size-s {
+    width: 105px;
+    height: 105px;
+
+    font-size: var(--font-smaller);
+
+    .tile-controls {
+      padding-bottom: 5px;
+    }
+
+    .tile-control {
+      padding: 2px;
+
+      :global(svg.svg-icon) {
+        width: var(--icon-xs);
+        height: var(--icon-xs);
+      }
+    }
+
+    .track-icon {
+      margin-bottom: 2px;
+      :global(svg) {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    .track-time {
+      margin-top: -1px;
+      font-size: .65rem;
+    }
+
+    .track-volume {
+      margin-left: 0;
+      width: 35px;
+
+      &::-webkit-slider-thumb {
+        margin-top: 1px;
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+    .track-scrubber {
+      input {
+        width: 90px;
+      }
+      input::-webkit-slider-thumb {
+        margin-top: 1px;
+        width: 15px;
+        height: 15px;
+      }
+    }
+  }
+
+  .tile.size-m {
+    width: 120px;
+    height: 120px;
+
+    font-size: var(--font-smaller);
+
+    .tile-control {
+      padding: 2px;
+
+      :global(svg.svg-icon) {
+        width: var(--icon-s);
+        height: var(--icon-s);
+      }
+    }
+
+    .track-icon {
+      margin-bottom: 2px;
+      :global(svg) {
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    .track-time {
+      margin-top: -1px;
+      font-size: .65rem;
+    }
+
+    .track-volume {
+      margin-left: 0;
+      width: 50px;
+
+      &::-webkit-slider-thumb {
+        margin-top: 1px;
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+    .track-scrubber {
+      input {
+        width: 90px;
+      }
+      input::-webkit-slider-thumb {
+        margin-top: 1px;
+        width: 15px;
+        height: 15px;
+      }
+    }
+  }
+
 </style>

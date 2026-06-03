@@ -21,9 +21,12 @@ export interface Tile {
   loop: boolean;
 }
 
+export type TileSize = "s" | "m" | "l";
+
 export interface PluginSettings {
   rootFolder: string;
   useSections: boolean;
+  tileSize: TileSize;
 };
 
 export interface PluginData {

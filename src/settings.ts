@@ -4,6 +4,7 @@ import { type PluginData, type PluginSettings } from "./types";
 import type Soundboard from "./plugin";
 
 import renderRootFolderSetting from "./settings/root-folder";
+import renderAppearanceSettings from "./settings/appearance";
 import renderTracksSettings from "./settings/tracks";
 import renderSectionsSettings from "./settings/sections";
 import renderDataSettings from "./settings/data";
@@ -11,6 +12,7 @@ import renderDataSettings from "./settings/data";
 export const DEFAULT_SETTINGS: PluginSettings = {
   rootFolder: '',
   useSections: false,
+  tileSize: 's',
 }
 
 export const DEFAULT_DATA: PluginData = {
@@ -23,6 +25,7 @@ export class SoundboardSettingsTab extends PluginSettingTab {
   plugin: Soundboard;
 
   private rootContainer: HTMLElement;
+  private appearanceContainer: HTMLElement;
   private sectionsContainer: HTMLElement;
   private tracksContainer: HTMLElement;
   private dataContainer: HTMLElement;
@@ -42,11 +45,13 @@ export class SoundboardSettingsTab extends PluginSettingTab {
     containerEl.empty();
 
     this.rootContainer = containerEl.createDiv();
+    this.appearanceContainer = containerEl.createDiv();
     this.sectionsContainer = containerEl.createDiv();
     this.tracksContainer = containerEl.createDiv();
     // this.dataContainer = containerEl.createDiv();
 
     this.renderRootFolder();
+    this.renderAppearance();
     this.renderSections();
     this.renderTracks();
     // this.renderClearData();
@@ -54,6 +59,10 @@ export class SoundboardSettingsTab extends PluginSettingTab {
 
   renderRootFolder(): void {
     renderRootFolderSetting(this.rootContainer, this);
+  }
+
+  renderAppearance(): void {
+    renderAppearanceSettings(this.appearanceContainer, this);
   }
 
   renderTracks(): void {

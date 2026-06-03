@@ -3,15 +3,12 @@ obsidian-soundboard
 
 obsidian-soundboard is a plugin for [Obsidian](https://obsidian.md) that allows you to use local sound files to create soundboards and playlists for tracks, ambiance and sound effects.
 
-> [!WARNING]
-> Plugin under heavy development
-
 ![Tile controls video demo](./docs/tile-demo.gif)
 
 But... why?
 ---
 
-Because I use [Obsidian](https://obsidian.md) on my laptop to run an offline D&D campaign (thank you [@javalent](github.com/javalent/)!), and use background music, ambiance, and sound effects. I couln't find anything that would fit my needs: no internet access required, ability to use custom tracks, and light on battery usage.
+Because I use [Obsidian](https://obsidian.md) on my laptop to run an offline D&D campaign (thanks to [@javalent](github.com/javalent/) excellent suite of plugins), and use background music, ambiance, and sound effects. I couln't find anything that would fit my needs: no internet access required, ability to use custom tracks, and light on battery usage.
 
 So I decided to add my soundtracks to my D&D vault, and started building a weird soundboard / playlist mix.
 
@@ -20,7 +17,7 @@ This plugin is probably not for you. But if it is, I hope you find it useful and
 Installation
 ---
 
-You can download the plugin from the [official obsidian plugin list](https://obsidian.md/plugins?search=soundboard) (pending [review](https://github.com/obsidianmd/obsidian-releases/pull/10790)), or use [BRAT](https://github.com/TfTHacker/obsidian42-brat) to install directly from github releases.
+You can add the plugin from the [obsidian community plugins soundboard page](https://community.obsidian.md/plugins/soundboard), or use [BRAT](https://github.com/TfTHacker/obsidian42-brat) to install directly from github releases.
 
 Remember to enable the plugin after installation!
 
@@ -63,6 +60,10 @@ Organize your tiles into sections / playlists that you can re-order, show / hide
 ### Customize track names, icon, and colors
 
 ![Soundboard track settings](./docs/settings-tracks.png)
+
+### Toggle between 3 tile sizes
+
+![Tile sizes (small, medium, large)](./docs/tile-sizes.png)
 
 Development
 ---
