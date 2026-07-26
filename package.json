@@ -1,6 +1,6 @@
 {
   "name": "obsidian-soundboard",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Play audio files from your vault in a soundboard.",
   "author": "João Gradim",
   "main": "main.js",
