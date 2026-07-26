@@ -16,7 +16,7 @@
 </script>
 
 <div class="soundboard">
-  {#if appState.settings.useSections}
+  {#if appState?.settings?.useSections ?? false}
     {#each appState.sections as section, idx (`${section.name}-${idx}`)}
       {#if section.visible}
         <SectionComponent section={section} idx={idx} />
@@ -24,7 +24,7 @@
     {/each}
   {:else}
     <div class="tiles">
-      {#each appState.tiles as tile, idx (idx)}
+      {#each (appState?.tiles ?? []) as tile, idx (idx)}
         <TileComponent
           idx={idx}
           tile={tile}

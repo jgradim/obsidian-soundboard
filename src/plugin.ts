@@ -10,15 +10,15 @@ import { ICON_COLORS } from './constants/colors';
 export default class Soundboard extends Plugin {
 
   onload(): void {
+    this.registerView(VIEW_TYPE_SOUNDBOARD, (leaf) => new SoundboardView(leaf));
+    this.addSettingTab(new SoundboardSettingsTab(this.app, this));
+
     // - register handlers inside `onLayoutReady` to avoid events sent on vault load
     // - wait for workspace to be ready before loading config / building app state
     //   otherwise we run into timing issues where `app.vault.getAllLoadedFiles()`
     //   only returns the root (/) folder
     this.app.workspace.onLayoutReady(async () => {
       await this.loadConfig();
-
-      this.registerView(VIEW_TYPE_SOUNDBOARD, (leaf) => new SoundboardView(leaf));
-      this.addSettingTab(new SoundboardSettingsTab(this.app, this));
 
       this.registerEvent(
         this.app.vault.on("create", async (file: TAbstractFile) => {
@@ -124,7 +124,14 @@ export default class Soundboard extends Plugin {
   }
 
   async loadConfig() {
-    const config: PluginConfiguration = await this.loadData() as PluginConfiguration;
+    const loadedData = await this.loadData();
+
+    const config: PluginConfiguration = loadedData !== null
+      ? loadedData
+      : {
+        settings: DEFAULT_SETTINGS,
+        data: DEFAULT_DATA,
+      };
 
     const settings: PluginSettings = Object.assign({}, DEFAULT_SETTINGS, config.settings);
     const data: PluginData = Object.assign({}, DEFAULT_DATA, config.data);
@@ -132,7 +139,10 @@ export default class Soundboard extends Plugin {
     appState.settings = settings;
 
     appState.tracks = this.buildVaultTracks(config);
-    appState.sections = data.sections.map((s) => ({ ...buildDefaultSection(), ...s }));
+    appState.sections = data.sections.map((section) => ({
+      ...buildDefaultSection(),
+      ...section,
+    }));
     appState.tiles = data.tiles ;
   }
 

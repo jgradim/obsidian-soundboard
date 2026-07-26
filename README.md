@@ -85,3 +85,9 @@ Releasing new versions
 - `git push origin main`
 - `git push origin --tags`
 - The `.github/workflows/release` will then be run when this new tag is pushed, and create a [draft release](https://github.com/jgradim/obsidian-soundboard/releases)
+
+Contributors
+---
+
+- [jgradim](https://github.com/jgradim)
+- [dvettkoe](https://github.com/dvettkoe)
