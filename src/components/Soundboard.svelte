@@ -24,17 +24,16 @@
     {/each}
   {:else}
     <div class="tiles">
-      {#each (appState?.tiles ?? []) as tile, idx (idx)}
+      {#each (appState?.tiles ?? []) as _, idx (idx)}
         <TileComponent
           idx={idx}
-          tile={tile}
           sectionIdx={null}
           onEnded={onEnded}
         />
       {/each}
 
       <button
-        class="add-tile"
+        class="add-tile add-tile-{appState?.settings?.tileSize}"
         aria-label="Add tile"
         onclick={onAddTile}
         use:setIcon={"square-plus"}
@@ -61,6 +60,16 @@
     padding: 10px;
     font-size: 1.2rem;
     cursor: pointer;
+
+    &.add-tile-s {
+      width: 105px;
+      height: 105px;
+    }
+
+    &.add-tile-m {
+      width: 120px;
+      height: 120px;
+    }
 
     :global(svg) {
       width: 48px;

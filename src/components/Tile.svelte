@@ -9,7 +9,6 @@
 
   interface Props {
     idx: number;
-    tile: Tile;
     sectionIdx: number | null;
     onEnded: () => void;
   }
@@ -107,7 +106,7 @@
   });
 
   // Callbacks
-  const onTrackChange = async (ev: Event) => {
+  const onTrackChange = (ev: Event) => {
     const target = ev.target as HTMLSelectElement;
 
     if (sectionIdx !== null)
@@ -116,7 +115,7 @@
       updateTile(idx, { track: target.value });
   }
 
-  const toggleLoop = async () => {
+  const toggleLoop = () => {
     if (!tile?.track) return;
 
     if (sectionIdx !== null)
@@ -133,7 +132,7 @@
     const audio: HTMLAudioElement = document.getElementById(uid) as HTMLAudioElement;
     
     if (isPlaying)
-      audio.play();
+      audio.play().then(() => {}).catch(() => {});
     else
       audio.pause();
   }

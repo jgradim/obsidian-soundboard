@@ -52,7 +52,6 @@
     {#each tiles as tile, idx (`${tile.track}-${idx}`)}
       <TileComponent
         idx={idx}
-        tile={tile}
         sectionIdx={sectionIdx}
         onEnded={() => onTileEnded(idx)}
       />

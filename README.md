@@ -68,7 +68,7 @@ Organize your tiles into sections / playlists that you can re-order, show / hide
 Development
 ---
 
-This project aims to have no runtime dependencies other than `obsidian`.
+This project aims to have no runtime dependencies other than `obsidian` and `zod`.
 
 The custom soundboard view uses Svelte 5.
 

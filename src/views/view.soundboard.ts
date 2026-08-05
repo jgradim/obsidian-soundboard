@@ -24,11 +24,13 @@ export class SoundboardView extends ItemView {
     return 'audio-lines';
   }
 
-  protected async onOpen(): Promise<void> {
+  protected onOpen(): Promise<void> {
     this.soundboard = mount(SoundboardComponent, {
       target: this.contentEl,
       props: {}
     });
+
+    return Promise.resolve();
   }
 
   protected async onClose(): Promise<void> {

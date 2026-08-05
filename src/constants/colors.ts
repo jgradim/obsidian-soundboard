@@ -1,15 +1,20 @@
-export const ICON_COLORS: Array<{ bg: string; fg: string; }> = [
-  { bg: '#7213a5', fg: '#ffffff' },
-  { bg: '#7000cc', fg: '#ffffff' },
-  { bg: '#208cb2', fg: '#ffffff' },
-  { bg: '#00719d', fg: '#ffffff' },
-  { bg: '#253348', fg: '#ffffff' },
-  { bg: '#0d4157', fg: '#ffffff' },
-  { bg: '#66a650', fg: '#ffffff' },
-  { bg: '#207949', fg: '#ffffff' },
-  { bg: '#2c4941', fg: '#ffffff' },
-  { bg: '#dc9824', fg: '#ffffff' },
-  { bg: '#b8560f', fg: '#ffffff' },
-  { bg: '#c0460e', fg: '#ffffff' },
-  { bg: '#6f241d', fg: '#ffffff' },
+export const ICON_COLORS: Array<{ bg: string; fg: string }> = [
+  { bg: "#7213a5", fg: "#ffffff" },
+  { bg: "#7000cc", fg: "#ffffff" },
+  { bg: "#208cb2", fg: "#ffffff" },
+  { bg: "#00719d", fg: "#ffffff" },
+  { bg: "#253348", fg: "#ffffff" },
+  { bg: "#0d4157", fg: "#ffffff" },
+  { bg: "#66a650", fg: "#ffffff" },
+  { bg: "#207949", fg: "#ffffff" },
+  { bg: "#2c4941", fg: "#ffffff" },
+  { bg: "#dc9824", fg: "#ffffff" },
+  { bg: "#b8560f", fg: "#ffffff" },
+  { bg: "#c0460e", fg: "#ffffff" },
+  { bg: "#6f241d", fg: "#ffffff" },
 ];
+
+export const DEFAULT_COLOR: { bg: string; fg: string } = {
+  bg: "#b8560f",
+  fg: "#ffffff",
+};
