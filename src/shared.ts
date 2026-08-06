@@ -1,7 +1,7 @@
 import { TFile, type TAbstractFile } from "obsidian";
 
 import { TILE_DEFAULT_VOLUME } from "./constants/tile";
-import type { Section, Tile, Track } from "./types";
+import type { Section, Tile, TileSize, Track } from "./types";
 
 export const allowedAudioExtensions = [
   'flac',
@@ -43,12 +43,16 @@ export const tileUid = (sectionIdx: number | null, idx: number): string => {
 export const isSoundboardFile = (
   file: TAbstractFile,
   rootFolder: string,
-): boolean => {
+): file is TFile => {
   return (
     file instanceof TFile
     && file.path.startsWith(rootFolder)
     && allowedAudioExtensions.includes(file.extension)
   );
+}
+
+export const isTileSize = (value: string): value is TileSize => {
+  return ["s", "m", "l"].includes(value);
 }
 
 export const sortTracksByPath = (a: Track, b: Track): number => {

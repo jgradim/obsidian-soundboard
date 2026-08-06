@@ -1,4 +1,4 @@
-import {App, PluginSettingTab } from "obsidian";
+import { App, PluginSettingTab } from "obsidian";
 
 import { type PluginData, type PluginSettings } from "./types";
 import type Soundboard from "./plugin";
@@ -10,25 +10,25 @@ import renderSectionsSettings from "./settings/sections";
 import renderDataSettings from "./settings/data";
 
 export const DEFAULT_SETTINGS: PluginSettings = {
-  rootFolder: '',
+  rootFolder: "",
   useSections: false,
-  tileSize: 's',
-}
+  tileSize: "s",
+};
 
 export const DEFAULT_DATA: PluginData = {
   tracks: {},
   tiles: [],
   sections: [],
-}
+};
 
 export class SoundboardSettingsTab extends PluginSettingTab {
   plugin: Soundboard;
 
-  private rootContainer: HTMLElement;
-  private appearanceContainer: HTMLElement;
-  private sectionsContainer: HTMLElement;
-  private tracksContainer: HTMLElement;
-  private dataContainer: HTMLElement;
+  private rootContainer!: HTMLElement;
+  private appearanceContainer!: HTMLElement;
+  private sectionsContainer!: HTMLElement;
+  private tracksContainer!: HTMLElement;
+  private dataContainer!: HTMLElement;
 
   constructor(app: App, plugin: Soundboard) {
     super(app, plugin);

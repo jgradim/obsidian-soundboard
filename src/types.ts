@@ -51,14 +51,14 @@ export const AppStateSchema = z.object({
 
 export const SoundboardDataSchema = z.object({
   settings: z.object({
-    rootFolder: z.string().default("/"),
+    rootFolder: z.string().default(""),
     useSections: z.boolean().default(false),
     tileSize: z.enum(["s", "m", "l"]).default("s"),
   }),
   data: z.object({
     tracks: z.record(z.string(), TrackSchema).default({}),
-    tiles: z.array(TileSchema),
-    sections: z.array(SectionSchema)
+    tiles: z.array(TileSchema).default([]),
+    sections: z.array(SectionSchema).default([]),
   }),
 });
 

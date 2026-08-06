@@ -1,8 +1,8 @@
 import { SettingGroup } from "obsidian";
 
 import type { SoundboardSettingsTab } from "../settings";
-import type { TileSize } from "../types";
 import { updateSettings } from "../state.svelte";
+import { isTileSize } from "../shared";
 
 export default function renderAppearanceSettings(
   containerEl: HTMLElement,
@@ -24,7 +24,9 @@ export default function renderAppearanceSettings(
               m: "Medium",
               l: "Large",
             })
-            .onChange(async (tileSize: TileSize) => {
+            .onChange(async (tileSize: string) => {
+              if (!isTileSize(tileSize)) return;
+
               updateSettings({ tileSize });
               await plugin.saveConfig();
               await plugin.loadConfig();

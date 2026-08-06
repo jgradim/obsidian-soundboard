@@ -112,7 +112,7 @@ export default class Soundboard extends Plugin {
         (file: TAbstractFile) =>
           isSoundboardFile(file, appState.settings.rootFolder) &&
           file instanceof TFile,
-      ) as Array<TFile>;
+      );
   }
 
   buildTrack(file: TFile): Track {
